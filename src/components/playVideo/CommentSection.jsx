@@ -9,6 +9,8 @@ import { renderPostBody } from '@ecency/render-helper';
 import { Client } from '@hiveio/dhive';
 import UpvoteTooltip from '../tooltip/UpvoteTooltip';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const client = new Client(['https://api.hive.blog']);
 
@@ -21,7 +23,6 @@ function CommentSection({ videoDetails, author, permlink }) {
   const [selectedPost, setSelectedPost] = useState({ author: '', permlink: '' });
   const [showTooltip, setShowTooltip] = useState(false);
   const [activeTooltipPermlink, setActiveTooltipPermlink] = useState(null);
-  const [commemtStyle, setCommentStyle] = useState(true);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -103,6 +104,7 @@ function CommentSection({ videoDetails, author, permlink }) {
         'Posting',
         async (response) => {
           if (response.success) {
+            toast.success('Comment posted successfully!');
             const newComment = {
               author: {
                 username: user,
@@ -150,44 +152,45 @@ function CommentSection({ videoDetails, author, permlink }) {
             setCommentInfo('');
             setActiveReply(null);
             setReplyToComment(null);
+            toast.success('Comment posted successfully!');
           } else {
-            alert(`Comment failed: ${response.message}`);
+            toast.error(`Comment failed: ${response.message}`);
           }
         }
       );
     } else {
-      alert('Hive Keychain is not installed. Please install the extension.');
+      toast.error('Hive Keychain is not installed. Please install the extension.');
     }
   };
 
-  const handleVote = (username, permlink, weight = 10000) => {
-    if (window.hive_keychain) {
-      window.hive_keychain.requestBroadcast(
-        user,
-        [
-          [
-            'vote',
-            {
-              voter: user,
-              author: username,
-              permlink,
-              weight,
-            },
-          ],
-        ],
-        'Posting',
-        (response) => {
-          if (response.success) {
-            alert('Vote successful!');
-          } else {
-            alert(`Vote failed: ${response.message}`);
-          }
-        }
-      );
-    } else {
-      alert('Hive Keychain is not installed. Please install the extension.');
-    }
-  };
+  // const handleVote = (username, permlink, weight = 10000) => {
+  //   if (window.hive_keychain) {
+  //     window.hive_keychain.requestBroadcast(
+  //       user,
+  //       [
+  //         [
+  //           'vote',
+  //           {
+  //             voter: user,
+  //             author: username,
+  //             permlink,
+  //             weight,
+  //           },
+  //         ],
+  //       ],
+  //       'Posting',
+  //       (response) => {
+  //         if (response.success) {
+  //           alert('Vote successful!');
+  //         } else {
+  //           alert(`Vote failed: ${response.message}`);
+  //         }
+  //       }
+  //     );
+  //   } else {
+  //     alert('Hive Keychain is not installed. Please install the extension.');
+  //   }
+  // };
 
   const toggleTooltip = (author, permlink, index) => {
     console.log('Toggle Tooltip:', author, permlink, index);
@@ -236,7 +239,6 @@ function CommentSection({ videoDetails, author, permlink }) {
           commentInfo={commentInfo}
           handlePostComment={handlePostComment}
           depth={0}
-          handleVote={handleVote}
           processedBody={processedBody}
           toggleTooltip={toggleTooltip}
           selectedPost={selectedPost}
@@ -244,7 +246,7 @@ function CommentSection({ videoDetails, author, permlink }) {
           setShowTooltip={setShowTooltip}
           activeTooltipPermlink={activeTooltipPermlink}
           setActiveTooltipPermlink={setActiveTooltipPermlink}
-          commemtStyle={commemtStyle}
+
           
         />
       ))}
