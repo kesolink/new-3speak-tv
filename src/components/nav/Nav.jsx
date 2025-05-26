@@ -95,9 +95,9 @@ function Nav({ setSideBar, toggleProfileNav }) {
               <Link to="/" className="side-link-n" onClick={handleNav}>
                 <MdOutlineDashboard className="icon" /> <span>Home</span>
               </Link>
-              <Link to="/upload" className="side-link-n" onClick={handleNav}>
+              {authenticated && <Link to="/upload" className="side-link-n" onClick={handleNav}>
                 <IoCloudUploadSharp className="icon" /> <span>Upload Video</span>
-              </Link>
+              </Link>}
               <Link to="/firstupload" className="side-link-n" onClick={handleNav}>
                 <FaRegSmile className="icon"/> <span>First Uploads</span>
               </Link>
