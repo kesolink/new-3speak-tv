@@ -68,8 +68,8 @@ function Nav({ setSideBar, toggleProfileNav }) {
         <Link to="/"><img className="logo" src={logo} alt="" /></Link>
       </div>
       
-      <div className="phone-nav-left" >
-        <GiToggles size={25} className="menu-icon" onClick={handleNav} ref={menuIconRef}/>
+      <div className="phone-nav-left" ref={menuIconRef} >
+        <GiToggles size={25} className="menu-icon" onClick={handleNav} />
         <Link to="/"><img className="logo" src={logo} alt="" /></Link>
       </div>
       <div className="nav-middle flex-dev">

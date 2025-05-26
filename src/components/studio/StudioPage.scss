@@ -124,6 +124,15 @@
         border-radius: 4px;
         padding: 7px 10px;
         cursor: pointer;
+        .wrap{
+          display: flex;
+          align-items: center;
+          gap: 3px;
+          img{
+            width: 20px;
+
+          }
+        }
         span {
           font-size: 14px;
           color: #858796;

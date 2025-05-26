@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Beneficiary_modal.scss';
 import { MdDeleteForever } from 'react-icons/md';
 
@@ -8,13 +8,19 @@ import { useAppStore } from '../../lib/store';
 
 const client = new Client('https://api.hive.blog');
 
-function Beneficiary_modal({ isOpen, close, setBeneficiaries }) {
-    const {user} = useAppStore();
+function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList, setList, list, remaingPercent, setRemaingPercent }) {
+  const {user} = useAppStore();
   const [account, setAccount] = useState('');
   const [percent, setPercent] = useState(0);
-  const [list, setList] = useState([]);
   const [error, setError] = useState('');
-  const [remaingPercent, setRemaingPercent] = useState (89)
+
+
+  useEffect(() => {
+  setBeneficiaryList(prev => prev + list.length);
+}, [list]);
+
+  console.log('list', list.length);
+
 
 
   async function isAccountValid(username) {
@@ -91,9 +97,11 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries }) {
   };
 
   const handleDelete = (index) => {
-    const updatedList = list.filter((_, i) => i !== index); // Remove the item at the specified index
-    setList(updatedList); // Update the local list
-  };
+  const deletedPercent = list[index].percent; // get the percent of the item being deleted
+  const updatedList = list.filter((_, i) => i !== index); // remove the item
+  setList(updatedList);
+  setRemaingPercent((prev) => prev + deletedPercent); // add back the deleted percent
+};
 
   const handleSave = () => {
     // Map the list to the required format

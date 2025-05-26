@@ -12,14 +12,10 @@ function Watch() {
   const v = searchParams.get('v'); // Extract the "v" query parameter
   const [author, permlink] = (v ?? 'unknown/unknown').split('/');
 
-  console.log('Author:', author);
-  console.log('Permlink:', permlink);
-
   const { data: videoData, loading: videoLoading, error: videoError } = useQuery(GET_VIDEO_DETAILS, {
     variables: { author, permlink },
   });
 
-  console.log(videoData)
 
   const videoDetails = videoData?.socialPost;
 
@@ -28,7 +24,6 @@ function Watch() {
   });
 
   const suggestedVideos = suggestionsData?.relatedFeed?.items;
-  console.log(suggestedVideos)
   
   const isNetworkError = videoError && videoError.networkError;
 
@@ -36,7 +31,6 @@ function Watch() {
     return <BarLoader /> ;
   }
 
-  
 
   if (videoError || suggestionsError) {
     return <div>Error loading data. Please try again.</div>;

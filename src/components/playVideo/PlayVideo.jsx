@@ -48,7 +48,6 @@ const PlayVideo = ({ videoDetails, author, permlink }) => {
 
   dayjs.extend(relativeTime);
 
-  console.log("videoDetails", videoDetails);
 
   const formatRelativeTime = (date) => {
     const now = dayjs();
@@ -69,13 +68,10 @@ const PlayVideo = ({ videoDetails, author, permlink }) => {
     try {
       const data = await getUersContent(author, permlink);
       if (!data) {
-        console.log("Post not found");
         return [];
       }
 
       if (data.active_votes )
-
-      console.log("hive data", data)
 
       setOptimisticVoteCount(data?.active_votes?.length ?? 0);
       // 9126375037
@@ -94,7 +90,6 @@ const PlayVideo = ({ videoDetails, author, permlink }) => {
           reward: parseFloat(vote.rshares) / 1e12 // Simplified reward estimation
         }));
 
-      console.log(topVotes);
       setTooltipVoters(topVotes);
     } catch (error) {
       console.error("Error fetching upvotes:", error);
@@ -109,7 +104,6 @@ const PlayVideo = ({ videoDetails, author, permlink }) => {
     const getFollowersCount = async (author) => {
         try {
           const follower = await getFollowers(author);
-          console.log("Follower data:", follower);
           setFollowData(follower);
         } catch (err) {
           console.log(err);
@@ -174,7 +168,6 @@ const PlayVideo = ({ videoDetails, author, permlink }) => {
   });
 
   const profile = getUserProfile.data?.profile;
-  const content = videoDetails?.body.split("\n");
   const tags = videoDetails?.tags?.slice(0, 7);
   const comunity_name = videoDetails?.community?.title;
 
@@ -184,7 +177,6 @@ const PlayVideo = ({ videoDetails, author, permlink }) => {
       const result = url.includes("ipfs://")
         ? url.split("ipfs://")[1] // Extract the IPFS hash
         : url;
-      console.log(result);
       setVideoUrlSelected(`https://ipfs-3speak.b-cdn.net/ipfs/${result}`);
     }
   }, [spkvideo]);
@@ -195,58 +187,58 @@ const PlayVideo = ({ videoDetails, author, permlink }) => {
 
 
 
-  const handleVote = async (username, permlink, weight = 10000) => {
-    if(!authenticated){
-        toast.error("Login to upvote")
-        return
-      }
-    try{
-      setIsLoading(true)
-      const data = await getUersContent(author, permlink);
-      if (data.active_votes.some(vote => vote.voter === user)){
-        toast.info("You have already vote this post")
-        setIsLoading(false)
-        return
-      }
+  // const handleVote = async (username, permlink, weight = 10000) => {
+  //   if(!authenticated){
+  //       toast.error("Login to upvote")
+  //       return
+  //     }
+  //   try{
+  //     setIsLoading(true)
+  //     const data = await getUersContent(author, permlink);
+  //     if (data.active_votes.some(vote => vote.voter === user)){
+  //       toast.info("You have already vote this post")
+  //       setIsLoading(false)
+  //       return
+  //     }
 
-      if (window.hive_keychain) {
-      window.hive_keychain.requestBroadcast(
-        user,
-        [
-          [
-            "vote",
-            {
-              voter: user,
-              author: username,
-              permlink,
-              weight, // 10000 = 100%, 5000 = 50%
-            },
-          ],
-        ],
-        "Posting",
-        (response) => {
-          if (response.success) {
-            toast.success("Vote successful!");
-            setIsVoted(true);
-            setIsLoading(false)
+  //     if (window.hive_keychain) {
+  //     window.hive_keychain.requestBroadcast(
+  //       user,
+  //       [
+  //         [
+  //           "vote",
+  //           {
+  //             voter: user,
+  //             author: username,
+  //             permlink,
+  //             weight, // 10000 = 100%, 5000 = 50%
+  //           },
+  //         ],
+  //       ],
+  //       "Posting",
+  //       (response) => {
+  //         if (response.success) {
+  //           toast.success("Vote successful!");
+  //           setIsVoted(true);
+  //           setIsLoading(false)
 
 
-          } else {
-            setIsLoading(false)
-            toast.error(`Vote failed: ${response.message}`);
-          }
-        }
-      );
-    } else {
-      setIsLoading(false)
-      toast.info("Hive Keychain is not installed. Please install the extension.");
-    }
+  //         } else {
+  //           setIsLoading(false)
+  //           toast.error(`Vote failed: ${response.message}`);
+  //         }
+  //       }
+  //     );
+  //   } else {
+  //     setIsLoading(false)
+  //     toast.info("Hive Keychain is not installed. Please install the extension.");
+  //   }
 
-    }catch(err){
-      console.log("somthing went wrong" , err)
-    }
+  //   }catch(err){
+  //     console.log("somthing went wrong" , err)
+  //   }
     
-  };
+  // };
   const handleSelectTag = (tag) => {
     console.log(tag)
     navigate(`/t/${tag}`);

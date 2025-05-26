@@ -20,7 +20,7 @@ const CardVoteTooltip = ({ author, permlink, showTooltip, setShowTooltip, setVot
   const [isLoading, setIsLoading] = useState(false);
   const tooltipRef = useRef(null);
 
-  console.log('UpvoteTooltip', { author, permlink, showTooltip });
+  // console.log('UpvoteTooltip', { author, permlink, showTooltip });
 
   // Close tooltip on outside click
   useEffect(() => {
@@ -146,7 +146,7 @@ const CardVoteTooltip = ({ author, permlink, showTooltip, setShowTooltip, setVot
           }
         });
       } else {
-        alert('Hive Keychain not found.');
+        toast.info('Hive Keychain not found.');
         setIsLoading(false);
         setShowTooltip(false);
       }

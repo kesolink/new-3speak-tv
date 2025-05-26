@@ -22,7 +22,6 @@ export async function has3SpeakPostAuth(username) {
         // Safely extract posting auths
         const postingAuths = accounts[0]?.posting?.account_auths?.map(auth => auth[0]) || [];
 
-        console.log(`Posting Auths for ${username}:`, postingAuths);
 
         // Check if "threespeak" is in the posting auths
         return postingAuths.includes("threespeak");

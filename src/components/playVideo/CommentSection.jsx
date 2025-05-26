@@ -21,13 +21,11 @@ function CommentSection({ videoDetails, author, permlink }) {
   const [selectedPost, setSelectedPost] = useState({ author: '', permlink: '' });
   const [showTooltip, setShowTooltip] = useState(false);
   const [activeTooltipPermlink, setActiveTooltipPermlink] = useState(null);
-  const [commemtStyle, setCommentStyle] = useState(true);
 
   useEffect(() => {
     const fetchComments = async () => {
       try {
         const replies = await client.call('condenser_api', 'get_content_replies', [author, permlink]);
-        console.log('Replies:', replies);
         const commentsWithChildren = await loadNestedComments(replies);
         setCommentList(commentsWithChildren);
       } catch (error) {
@@ -160,37 +158,37 @@ function CommentSection({ videoDetails, author, permlink }) {
     }
   };
 
-  const handleVote = (username, permlink, weight = 10000) => {
-    if (window.hive_keychain) {
-      window.hive_keychain.requestBroadcast(
-        user,
-        [
-          [
-            'vote',
-            {
-              voter: user,
-              author: username,
-              permlink,
-              weight,
-            },
-          ],
-        ],
-        'Posting',
-        (response) => {
-          if (response.success) {
-            alert('Vote successful!');
-          } else {
-            alert(`Vote failed: ${response.message}`);
-          }
-        }
-      );
-    } else {
-      alert('Hive Keychain is not installed. Please install the extension.');
-    }
-  };
+  // const handleVote = (username, permlink, weight = 10000) => {
+  //   if (window.hive_keychain) {
+  //     window.hive_keychain.requestBroadcast(
+  //       user,
+  //       [
+  //         [
+  //           'vote',
+  //           {
+  //             voter: user,
+  //             author: username,
+  //             permlink,
+  //             weight,
+  //           },
+  //         ],
+  //       ],
+  //       'Posting',
+  //       (response) => {
+  //         if (response.success) {
+  //           alert('Vote successful!');
+  //         } else {
+  //           alert(`Vote failed: ${response.message}`);
+  //         }
+  //       }
+  //     );
+  //   } else {
+  //     alert('Hive Keychain is not installed. Please install the extension.');
+  //   }
+  // };
 
   const toggleTooltip = (author, permlink, index) => {
-    console.log('Toggle Tooltip:', author, permlink, index);
+    // console.log('Toggle Tooltip:', author, permlink, index);
     setSelectedPost({ author, permlink });
     console.log('Selected Post:', selectedPost);
     setShowTooltip(prev => !prev || activeTooltipPermlink !== permlink);
@@ -236,7 +234,7 @@ function CommentSection({ videoDetails, author, permlink }) {
           commentInfo={commentInfo}
           handlePostComment={handlePostComment}
           depth={0}
-          handleVote={handleVote}
+          // handleVote={handleVote}
           processedBody={processedBody}
           toggleTooltip={toggleTooltip}
           selectedPost={selectedPost}
@@ -244,7 +242,6 @@ function CommentSection({ videoDetails, author, permlink }) {
           setShowTooltip={setShowTooltip}
           activeTooltipPermlink={activeTooltipPermlink}
           setActiveTooltipPermlink={setActiveTooltipPermlink}
-          commemtStyle={commemtStyle}
           
         />
       ))}

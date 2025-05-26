@@ -147,7 +147,7 @@ const handleVote = async () => {
         }
       );
     } else {
-      alert('Hive Keychain not found.');
+      toast.info('Hive Keychain not found.');
       setIsLoading(false);
       setShowTooltip(false);
     }

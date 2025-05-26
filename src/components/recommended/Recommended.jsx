@@ -7,8 +7,6 @@ import { Link } from "react-router-dom";
 
 function Recommended({suggestedVideos}) {
 
-  console.log(suggestedVideos)
-  console.log('Image URL:', suggestedVideos?.spkvideo?.thumbnail_url);
 
   const titleTextTruncate = (text, maxLength) =>
     text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;

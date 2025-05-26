@@ -22,30 +22,18 @@ import { useAppStore } from "../../lib/store";
 import Arrow from "./../../../public/images/arrow.png"
 import VideoPreview from "./VideoPreview"
 
-// import { useAppStore } from '../..//lib/store';
-// import { Client: HiveClient } from "@hiveio/dhive";
-
-
-
-
 
 function StudioPage() {
  const client = axios.create({});
  const {updateProcessing} = useAppStore()
   const studioEndPoint = "https://studio.3speak.tv";
-  // const tusEndPoint = "https://uploads.3speak.tv/files/";
-
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tagsInputValue, setTagsInputValue] = useState("");
   const [tagsPreview, setTagsPreview] = useState([]);
   const [community, setCommunity] = useState("hive-181335");
-  // const [thumbnailPreview, setThumbnailPreview] = useState(null);
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [beneficiaries, setBeneficiaries] = useState('[]');
-  // const [uploadURL, setUploadURL] = useState("");
-  // const [videoFile, setVideoFile] = useState(null);
-  // const [videoDuration, setVideoDuration] = useState(0);
   const [videoId, setVideoId] = useState("");
   const [isOpen, setIsOpen] = useState(false)
   const [uploadModalOpen, setUploadModalOpen] = useState(false)
@@ -59,6 +47,9 @@ function StudioPage() {
   const [prevVideoFile, setPrevVideoFile ] = useState(null)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const [BeneficiaryList, setBeneficiaryList] = useState(2)
+  const [list, setList] = useState([]);
+  const [remaingPercent, setRemaingPercent] = useState (89)
   
   
   console.log("accesstokrn=====>", accessToken)
@@ -140,7 +131,7 @@ function StudioPage() {
           isNsfwContent: false,
           tags:formattedTags,
           thumbnail: thumbnailIdentifier,
-          communityID: community,
+          communityID: community.name,
           declineRewards,
           rewardPowerup
         }, {
@@ -203,7 +194,7 @@ function StudioPage() {
         </div>
 
         <div className="community-wrap" onClick={openCommunityModal}>
-            {community ? <span>{community === "hive-181335" ? "Select Community" : community }</span> : <span> Select Community</span> }
+            {community ? <span>{community === "hive-181335" ? "Select Community" : <div className="wrap"><img src={`https://images.hive.blog/u/${community.name}/avatar`} alt="" /><span></span>{community.title}</div> }</span> : <span> Select Community </span> }
             <IoIosArrowDropdownCircle size={16} />
           </div> 
 
@@ -227,32 +218,12 @@ function StudioPage() {
            <span>Other accounts that should get a % of the post rewards.</span>
            </div>
            <div className="bene-btn-wrap" onClick={toggleBeneficiaryModal}>
-            <span>BENEFICIARIES</span>
+            <span>{list.length > 0 && <spa>{list.length}</spa>} {" "} BENEFICIARIES</span>
             <MdPeopleAlt />
            </div>
           </div>
-
-
-          
         </div>
 
-          {/* <input type="text" value={community} onChange={(e) => setCommunity(e.target.value)} /> */}
-          {/* <div className="community-wrap" onClick={openCommunityModal}>
-            {community ? <span>{community}</span> : <span> Select Community</span> }
-            <IoIosArrowDropdownCircle size={16} />
-          </div>  */}
-
-        {/* <div className="input-group">
-          <label htmlFor="">Thumbnail</label>
-          <input type="file" accept="image/*" onChange={handleThumbnailUpload} />
-        </div> */}
-        {/* {thumbnailPreview && (
-            <div className="thumbnail-preview">
-              <p>Thumbnail Preview:</p>
-              <img src={thumbnailPreview ? thumbnailPreview : "https://studio.3speak.tv/img/default-thumbnail.jpg"} alt="Thumbnail Preview" style={{ width: "100%", maxWidth: "300px" }} />
-            </div>
-          )} */}
-        {/* <button onClick={updateVideoInfo}>Update Video Info</button> */}
         <div className="submit-btn-wrap">
         <button onClick={()=>{console.log("description===>", description); handleSubmitDetails()}}>{loading  ? <span className="wrap-loader" >Processing <TailChase size="15" speed="1.75" color="white" /></span> : "Submit Details"}</button>
         </div>
@@ -311,7 +282,16 @@ function StudioPage() {
     </div>
     { isOpen && <Communitie_modal isOpen={isOpen} data={communitiesData} close={closeCommunityModal } setCommunity={setCommunity} />}
 {uploadModalOpen && <Upload_modal setPrevVideoUrl={setPrevVideoUrl} setPrevVideoFile={setPrevVideoFile}  setVideoId={setVideoId} accessToken={accessToken} username={username} isOpen={uploadModalOpen} close={toggleUploadModal} setThumbnailFile={setThumbnailFile} thumbnailFile={thumbnailFile} /> }
-{benficaryOpen && <Beneficiary_modal close={toggleBeneficiaryModal} isOpen={benficaryOpen} setBeneficiaries={setBeneficiaries} />  }
+  {benficaryOpen && <Beneficiary_modal 
+  close={toggleBeneficiaryModal} 
+  isOpen={benficaryOpen} 
+  setBeneficiaries={setBeneficiaries} 
+  setBeneficiaryList={setBeneficiaryList} 
+  setList={setList} 
+  list={list}
+  setRemaingPercent={setRemaingPercent}
+  remaingPercent={remaingPercent}
+  />  }
     </>
   );
 }

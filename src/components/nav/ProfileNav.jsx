@@ -27,7 +27,6 @@ function ProfileNav({isVisible, onclose}) {
           const getAccountlist = JSON.parse(localStorage.getItem("accountsList")) || [];
           setAccountList(getAccountlist)
         },[])
-    // console.log(getUserProfile)
 
     const handlewallletNavigation = ()=>{
       navigate(`/wallet/${user}`)
@@ -43,7 +42,6 @@ function ProfileNav({isVisible, onclose}) {
       const result = await getVotePower(user);
       if (result){
         const { vp, rcPercent } = result;
-        console.log("Vote power", vp)
         setRc(rcPercent.toFixed(2));
         setVotingPower((vp / 100).toFixed(2));
       }

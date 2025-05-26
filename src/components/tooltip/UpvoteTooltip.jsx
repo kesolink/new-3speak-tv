@@ -21,7 +21,7 @@ const UpvoteTooltip = ({ author, permlink, showTooltip, setShowTooltip, setIsVot
   const tooltipRef = useRef(null);
  
 
-  console.log('UpvoteTooltip', { author, permlink, showTooltip });
+  // console.log('UpvoteTooltip', { author, permlink, showTooltip });
 
   // Close tooltip on outside click
   useEffect(() => {

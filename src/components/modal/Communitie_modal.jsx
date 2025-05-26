@@ -25,6 +25,8 @@ function CommunitieModal({ isOpen, data, close, setCommunity }) {
     return null; // Do not render the modal if it's not open
   }
 
+  console.log("Communities data:", visibleCommunities);
+
   return (
     <div className={`modal ${isOpen ? "open" : ""}`}>
       <div className="overlay" onClick={close}></div>
@@ -54,7 +56,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity }) {
                 <div className="wrap-flow"
                   key={index}
                 //   className="community-item"
-                  onClick={() => {setCommunity(community.name); close() }}
+                  onClick={() => {setCommunity(community); close() }}
                 >
                  <img src={`https://images.ecency.com/u/${community.name}/avatar/small`} alt="" />
                  <span>{community.title}</span> 
