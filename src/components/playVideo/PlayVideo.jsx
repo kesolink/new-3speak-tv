@@ -43,9 +43,12 @@ const PlayVideo = ({ videoDetails, author, permlink }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [followData, setFollowData] = useState(null);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [optimisticVoteCount, setOptimisticVoteCount] = useState();
   const navigate = useNavigate();
 
   dayjs.extend(relativeTime);
+
+  console.log("videoDetails", videoDetails);
 
   const formatRelativeTime = (date) => {
     const now = dayjs();
@@ -72,7 +75,9 @@ const PlayVideo = ({ videoDetails, author, permlink }) => {
 
       if (data.active_votes )
 
-      console.log(data)
+      console.log("hive data", data)
+
+      setOptimisticVoteCount(data?.active_votes?.length ?? 0);
       // 9126375037
 
       if (data.active_votes.some(vote => vote.voter === user)) {
@@ -344,7 +349,7 @@ const handleProfileNavigate = (user) => {
               <BiLike className={isVoted ? "icon-red" :"icon"} 
               onClick={() => { toggleTooltip(author, permlink) }} 
               />}
-              <div className="amount" onMouseEnter={() => setOpenToolTip(true)} onMouseLeave={() => setOpenToolTip(false)}>{videoDetails?.stats.num_votes}</div>
+              <div className="amount" onMouseEnter={() => setOpenToolTip(true)} onMouseLeave={() => setOpenToolTip(false)}>{optimisticVoteCount}</div>
               {openTooltip && <ToolTip tooltipVoters={tooltipVoters} />}
             </span>
             
@@ -365,6 +370,7 @@ const handleProfileNavigate = (user) => {
               author={author}
               permlink={permlink}
               setIsVoted={setIsVoted}
+              setOptimisticVoteCount={setOptimisticVoteCount}
               
               // setVotedPosts={setVotedPosts}
             />

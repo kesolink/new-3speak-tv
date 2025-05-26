@@ -21,6 +21,7 @@ import 'ldrs/react/TailChase.css'
 import { useAppStore } from "../../lib/store";
 import Arrow from "./../../../public/images/arrow.png"
 import VideoPreview from "./VideoPreview"
+
 // import { useAppStore } from '../..//lib/store';
 // import { Client: HiveClient } from "@hiveio/dhive";
 
@@ -36,7 +37,8 @@ function StudioPage() {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [tags, setTags] = useState("");
+  const [tagsInputValue, setTagsInputValue] = useState("");
+  const [tagsPreview, setTagsPreview] = useState([]);
   const [community, setCommunity] = useState("hive-181335");
   // const [thumbnailPreview, setThumbnailPreview] = useState(null);
   const [thumbnailFile, setThumbnailFile] = useState(null);
@@ -115,14 +117,17 @@ function StudioPage() {
     
     console.log(beneficiaries)
     console.log(title)
-    console.log(tags)
+    console.log(tagsInputValue)
     console.log(community)
     console.log(thumbnailFile)
 
-    if (!title || !description || !tags || !community || !thumbnailFile ) {
+    if (!title || !description || !tagsInputValue || !community || !thumbnailFile ) {
       toast.error("Please fill in all fields, upload a thumbnail, and upload a video!");
       return;
     }
+
+    const formattedTags = tagsInputValue.trim().split(/\s+/).join(",");
+
     const thumbnailIdentifier = thumbnailFile.replace("https://uploads.3speak.tv/files/", "");
     try {
       setLoading(true)
@@ -133,7 +138,7 @@ function StudioPage() {
           videoId: videoId, // Using uploaded video URL as videoId
           title,
           isNsfwContent: false,
-          tags,
+          tags:formattedTags,
           thumbnail: thumbnailIdentifier,
           communityID: community,
           declineRewards,
@@ -191,7 +196,7 @@ function StudioPage() {
 
         <div className="input-group">
           <label htmlFor="">Tag</label>
-          <input type="text" value={tags} onChange={(e) => setTags(e.target.value)}  />
+          <input type="text" value={tagsInputValue} onChange={(e) => {setTagsInputValue(e.target.value.toLowerCase()); setTagsPreview(e.target.value.toLowerCase().trim().split(/\s+/));}}  />
           <div className="wrap">
           <span>Separate multiple tags with </span> <span>Space</span>
           </div>
@@ -268,7 +273,7 @@ function StudioPage() {
 
         {/* Show the tags */}
         <div className="preview-tags">
-        {tags &&<span> Tags: {tags.split(',').map((item, index) => (
+        {tagsPreview &&<span> Tags: {tagsPreview.map((item, index) => (
       <span className="item" key={index} style={{ marginRight: '8px' }}>
         {item}
       </span>

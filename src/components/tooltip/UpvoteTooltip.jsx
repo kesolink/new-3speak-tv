@@ -11,7 +11,7 @@ import 'ldrs/react/TailChase.css';
 
 const client = new Client(['https://api.hive.blog']);
 
-const UpvoteTooltip = ({ author, permlink, showTooltip, setShowTooltip, cardStyle, setIsVoted }) => {
+const UpvoteTooltip = ({ author, permlink, showTooltip, setShowTooltip, setIsVoted, setOptimisticVoteCount }) => {
   const { user, authenticated } = useAppStore();
   const [votingPower, setVotingPower] = useState(100);
   const [weight, setWeight] = useState(100);
@@ -19,7 +19,7 @@ const UpvoteTooltip = ({ author, permlink, showTooltip, setShowTooltip, cardStyl
   const [accountData, setAccountData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const tooltipRef = useRef(null);
-  const [commemtStyle, setCommentStyle] = useState(true);
+ 
 
   console.log('UpvoteTooltip', { author, permlink, showTooltip });
 
@@ -138,6 +138,10 @@ const UpvoteTooltip = ({ author, permlink, showTooltip, setShowTooltip, cardStyl
             setIsLoading(false);
             setShowTooltip(false);
             setIsVoted(true);
+            if(!existingVote){
+              setOptimisticVoteCount((prevCount) => prevCount + 1);
+            }
+            
             
           } else {
             toast.error('Vote failed, please try again');
