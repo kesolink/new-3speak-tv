@@ -118,7 +118,7 @@ function Wallet() {
     <div className="wallet-container">
       <div className="main-content">
         <div className="wallet-header">
-          <h1>My Wallet</h1>
+          <div className="wrap">{user === currentUser ?<h1>MY</h1>: <h1>{user}</h1>}<h1> Wallet</h1></div>
           <p>Manage your cryptocurrency assets</p>
         </div>
 
