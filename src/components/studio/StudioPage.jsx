@@ -219,7 +219,7 @@ function StudioPage() {
            </div>
            <div className="bene-btn-wrap" onClick={toggleBeneficiaryModal}>
             {list.length > 0 && <spa>{list.length}</spa>}
-            <span>  BENEFICIARIES</span>
+            <span> {""}  BENEFICIARIES</span>
             <MdPeopleAlt />
            </div>
           </div>

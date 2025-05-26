@@ -234,7 +234,6 @@ function CommentSection({ videoDetails, author, permlink }) {
           commentInfo={commentInfo}
           handlePostComment={handlePostComment}
           depth={0}
-          // handleVote={handleVote}
           processedBody={processedBody}
           toggleTooltip={toggleTooltip}
           selectedPost={selectedPost}

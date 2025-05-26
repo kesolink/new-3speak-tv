@@ -35,9 +35,6 @@
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      // background-image: linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 40%, rgba(10, 10, 10, 0.75) 100%);
-      // background-color: rgb(2, 2, 2);
-      // background-image: blue;
 
       .avatar-img {
         width: 45px;
@@ -84,12 +81,8 @@
       .wrap{
         display: flex;
     padding: 15px 0;
-    // background-color: #cccccc83;
-    // width: 100%;
-    // background: red;
     border-radius: 4px;
     align-items: center;
-    // margin-bottom: 20px;
     width: fit-content;
     flex-wrap: wrap;
     cursor: pointer;

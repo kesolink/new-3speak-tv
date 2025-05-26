@@ -74,7 +74,6 @@ const PlayVideo = ({ videoDetails, author, permlink }) => {
       if (data.active_votes )
 
       setOptimisticVoteCount(data?.active_votes?.length ?? 0);
-      // 9126375037
 
       if (data.active_votes.some(vote => vote.voter === user)) {
       setIsVoted(true);
@@ -115,46 +114,46 @@ const PlayVideo = ({ videoDetails, author, permlink }) => {
     getTooltipVoters();
   }, [author, permlink]); // Add author and permlink as dependencies
 
-  const handlePostComment = () => {
-    if(!authenticated){
-        toast.error("Login to make comment")
-        return
-      }
-    const parent_permlink = permlink;
-    const permlinks = `re-${parent_permlink}-${Date.now()}`;
-    if (window.hive_keychain) {
-      window.hive_keychain.requestBroadcast(
-        user,
-        [
-          [
-            "comment",
-            {
-              parent_author: author,
-              parent_permlink,
-              author: user,
-              permlink: permlinks,
-              weight: 10000,
-              title: "",
-              body: commentData,
-              json_metadata: "{\"app\":\"3speak/new-version\"}",
-              __config: { originalBody: null, comment_options: {} },
-            },
-          ],
-        ],
-        "Posting",
-        (response) => {
-          if (response.success) {
-            setCommentData("")
-            toast.success("Comment successful!");
-          } else {
-            toast.error(`Comment failed: ${response.message}`);
-          }
-        }
-      );
-    } else {
-      alert("Hive Keychain is not installed. Please install the extension.");
-    }
-  };
+  // const handlePostComment = () => {
+  //   if(!authenticated){
+  //       toast.error("Login to make comment")
+  //       return
+  //     }
+  //   const parent_permlink = permlink;
+  //   const permlinks = `re-${parent_permlink}-${Date.now()}`;
+  //   if (window.hive_keychain) {
+  //     window.hive_keychain.requestBroadcast(
+  //       user,
+  //       [
+  //         [
+  //           "comment",
+  //           {
+  //             parent_author: author,
+  //             parent_permlink,
+  //             author: user,
+  //             permlink: permlinks,
+  //             weight: 10000,
+  //             title: "",
+  //             body: commentData,
+  //             json_metadata: "{\"app\":\"3speak/new-version\"}",
+  //             __config: { originalBody: null, comment_options: {} },
+  //           },
+  //         ],
+  //       ],
+  //       "Posting",
+  //       (response) => {
+  //         if (response.success) {
+  //           setCommentData("")
+  //           toast.success("Comment successful!");
+  //         } else {
+  //           toast.error(`Comment failed: ${response.message}`);
+  //         }
+  //       }
+  //     );
+  //   } else {
+  //     alert("Hive Keychain is not installed. Please install the extension.");
+  //   }
+  // };
 
   const {
     data: getVideo,
