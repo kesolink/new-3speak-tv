@@ -16,7 +16,7 @@ function CommunitiesTags() {
     if(!authenticated){
       toast.error("Login to upload video")
     }else{
-      navigate(`/upload`)
+      navigate(`/studio`)
     }
     
   }
@@ -26,10 +26,10 @@ function CommunitiesTags() {
         <span onClick={()=>{handleSelectTag("splinterlands"); console.log("click")}}>splinterlands</span>
         <span onClick={()=>{handleSelectTag("vibes"); console.log("click")}}>vibes</span>
         <span onClick={()=>{handleSelectTag("music"); console.log("click")}}>music</span>
-        <span className="tags">garden</span>
-        <span className="tags">motivation</span>
-        <span className="tags">Qurator</span>
-        <span className="tags tab-out">Foodies Bee Hive</span>
+        <span className="tags" onClick={()=>{handleSelectTag("ocd"); console.log("click")}}>ocd</span>
+        <span className="tags"onClick={()=>{handleSelectTag("aliento"); console.log("click")}}>aliento</span>
+        <span className="tags" onClick={()=>{handleSelectTag("spendhbd"); console.log("click")}}>spendhbd</span>
+        <span className="tags tab-out"onClick={()=>{handleSelectTag("worldmappin"); console.log("click")}}>worldmappin</span>
         <span className="tab-out" onClick={()=>{handleSelectTag("leofinance"); console.log("click")}}>LeoFinance</span>
         {/* <span>garden</span>
         <span>motivation</span>
@@ -39,8 +39,8 @@ function CommunitiesTags() {
         <span>garden</span>
         <span>motivation</span>
         <span>Qurator</span> */}
-        <span className="tags tab-out">Foodies Bee Hive</span>
-        <span className="tags tab-out">LeoFinance</span>
+        <span className="tags tab-out" onClick={()=>{handleSelectTag("leofinance"); console.log("click")}}>openmic</span>
+        <span className="tags tab-out" onClick={()=>{handleSelectTag("leofinance"); console.log("click")}}>afritunes</span>
         </div>
 
         <div className="wrap-upload-video" onClick={handleNavigate}>

@@ -30,12 +30,14 @@ import UserProfilePage from "./components/Userprofilepage/UserProfilePage";
 import DraftStudio from "./components/studio/DraftStudio";
 import EditVideo from "./page/EditVideo";
 import ScrollToTop from "./components/ScrollToTop";
+import AboutPage from "./components/LandingPage/AboutPage";
 
 function App() {
   const { initializeAuth, authenticated } = useAppStore();
   const [sidebar, setSideBar] = useState(true);
   const [profileNavVisible, setProfileNavVisible] = useState(false);
-  const [globalCloseRender, setGlobalCloseRender] = useState(false)
+  const [globalCloseRender, setGlobalCloseRender] = useState(false);
+  const [reloadSwitch, setRelaodSwitch] = useState(false)
 
 
   useEffect(() => {
@@ -74,6 +76,7 @@ function App() {
             <Route path="/draft" element={<DraftStudio />} />
             <Route path="/editvideo/:d" element={<EditVideo />} />
             <Route path="/communities" element={<CommunitiesRender />} />
+            <Route path="/about" element={<AboutPage />} />
             <Route
               path="/community/:communityName"
               element={<CommunityPage />}

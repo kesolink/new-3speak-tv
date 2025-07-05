@@ -9,7 +9,7 @@ function ToolTip({tooltipVoters}) {
                     {tooltipVoters.map((voter, index) => (
                         <div key={index} className="tooltip-item">
                             <span className="username">@{voter.username}</span>
-                            <span className="reward">: ${voter.reward.toFixed(2)}</span>
+                            <span className="reward">: ${voter.reward}</span>
                         </div>
                     ))}
                 {/* ) : (

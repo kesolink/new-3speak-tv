@@ -64,38 +64,50 @@ const PlayVideo = ({ videoDetails, author, permlink }) => {
   };
 
   // Define getTooltipVoters BEFORE useEffect
-  const getTooltipVoters = async () => {
-    try {
-      const data = await getUersContent(author, permlink);
-      if (!data) {
-        return [];
-      }
+const getTooltipVoters = async () => {
+  try {
+    const data = await getUersContent(author, permlink);
+    if (!data) return [];
 
-      if (data.active_votes )
+    if (data.active_votes) {
+      setOptimisticVoteCount(data.active_votes.length);
 
-      setOptimisticVoteCount(data?.active_votes?.length ?? 0);
-      // 9126375037
+      setIsVoted(data.active_votes.some(vote => vote.voter === user));
 
-      if (data.active_votes.some(vote => vote.voter === user)) {
-      setIsVoted(true);
-    } else {
-      setIsVoted(false);
-    }
+      const totalRshares = data.active_votes.reduce(
+        (sum, vote) => sum + parseInt(vote.rshares),
+        0
+      );
+
+      const totalPayout =
+        parseFloat(data.pending_payout_value) > 0
+          ? parseFloat(data.pending_payout_value)
+          : parseFloat(data.total_payout_value) + parseFloat(data.curator_payout_value);
 
       const topVotes = data.active_votes
         .sort((a, b) => parseInt(b.rshares) - parseInt(a.rshares))
         .slice(0, 10)
-        .map(vote => ({
-          username: vote.voter,
-          reward: parseFloat(vote.rshares) / 1e12 // Simplified reward estimation
-        }));
+        .map(vote => {
+          const reward =
+            totalRshares > 0
+              ? (parseInt(vote.rshares) / totalRshares) * totalPayout
+              : 0;
+          return {
+            username: vote.voter,
+            reward: +reward.toFixed(3), // use `+` to make sure it's number
+          };
+        });
 
+      console.log(topVotes);
       setTooltipVoters(topVotes);
-    } catch (error) {
-      console.error("Error fetching upvotes:", error);
-      return [];
     }
-  };
+  } catch (error) {
+    console.error("Error fetching upvotes:", error);
+    return [];
+  }
+};
+
+
 
   useEffect(() => {
       getFollowersCount(author);

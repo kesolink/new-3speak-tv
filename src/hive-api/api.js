@@ -36,6 +36,23 @@ const client = new Client(SERVERS, {
     }
   }
 
+//   export async function getFollowCount(username) {
+//   try {
+//     const result = await client.call('follow_api', 'get_follow_count', [username]);
+//     // Result contains follower_count and following_count
+//     return {
+//       followers: result.follower_count,
+//       following: result.following_count
+//     };
+//   } catch (error) {
+//     console.error('Error fetching follow count:', error);
+//     return {
+//       followers: 0,
+//       following: 0
+//     };
+//   }
+// }
+
   export const isAccountValid = async (username)=>{
     try {
       const accounts = await client.database.getAccounts([username]);

@@ -194,8 +194,7 @@ const updateCommentsRecursively = (comments, targetPermlink, isRollback = false)
           <p>Vote Weight: {weight}%</p>
           <div className="wrap">
             {isLoading ? (
-              <TailChase className="loader-circle" size="15" speed="1.5" color="red" />
-            ) : (
+<div className='wrap-circle'><TailChase className="loader-circle" size="15" speed="1.5" color="red" /></div>            ) : (
               <IoChevronUpCircleOutline size={30} onClick={handleVote} />
             )}
             <input

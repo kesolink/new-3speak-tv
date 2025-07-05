@@ -1,0 +1,380 @@
+@use "../../mixins.scss" as *;
+// Red & White Theme SCSS Variables
+$primary-red: #dc2626;
+$primary-red-light: #fecaca;
+$primary-red-glow: #f87171;
+$white: #ffffff;
+$light-gray: #fafafa;
+$gray: #6b7280;
+$dark-gray: #374151;
+$border-gray: #e5e7eb;
+
+// Animation Variables
+$transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+// Shadows
+$shadow-card: 0 4px 20px -2px rgba(220, 38, 38, 0.1);
+$shadow-elegant: 0 10px 30px -10px rgba(220, 38, 38, 0.2);
+$shadow-glow: 0 0 40px rgba(248, 113, 113, 0.3);
+
+.followers-page {
+  min-height: 100vh;
+    // background: linear-gradient(180deg, $light-gray, $primary-red-light);
+
+  //   .container {
+  //     max-width: 1024px;
+  //     margin: 0 auto;
+  //     padding: 2rem 1rem;
+  //   }
+
+  .header {
+    text-align: center;
+    margin-bottom: 2rem;
+    animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: $dark-gray;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: $gray;
+      font-size: 1.125rem;
+    }
+  }
+
+  .tab-navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+    animation: slideUp 0.4s ease-out forwards;
+
+    .tab-container {
+        display: flex;
+      background: $white;
+      border-radius: 9999px;
+      padding: 0.5rem;
+      box-shadow: $shadow-card;
+      border: 1px solid $border-gray;
+      margin-bottom: 1rem;
+
+      .tab-button {
+        display: flex;
+        align-items: center;
+        // position: relative;
+        padding: 0.75rem 2rem;
+        border-radius: 9999px;
+        font-weight: 600;
+        transition: $transition-smooth;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: $gray;
+        @include respond(phone) {
+      padding: 0.55rem 10px;
+      }
+
+        &.active {
+          background: linear-gradient(135deg, $primary-red, $primary-red-glow);
+          color: $white;
+          box-shadow: $shadow-elegant;
+        }
+
+        &:not(.active):hover {
+          background: rgba(220, 38, 38, 0.1);
+          color: $primary-red;
+        }
+
+        .icon {
+          width: 1.25rem;
+          height: 1.25rem;
+          display: inline-block;
+          margin-right: 0.5rem;
+        }
+      }
+    }
+
+    .indicator {
+      font-size: 0.875rem;
+      color: $gray;
+      background: rgba(220, 38, 38, 0.1);
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(220, 38, 38, 0.2);
+    }
+  }
+
+  .users-section {
+    position: relative;
+
+    .loading-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 1rem;
+
+      .loader {
+        animation: pulseGlow 2s ease-in-out infinite;
+        background: rgba(220, 38, 38, 0.2);
+        width: 4rem;
+        height: 4rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .spinner {
+          width: 2rem;
+          height: 2rem;
+          border: 4px solid $primary-red;
+          border-top: 4px solid transparent;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+        }
+      }
+    }
+
+    .users-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: 1fr;
+
+      @media (min-width: 1024px) {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      @include respond(phone) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      }
+      @include respond(tab) {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      }
+    }
+  }
+
+  .user-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: $transition-smooth;
+    background: linear-gradient(145deg, $white, $light-gray);
+    box-shadow: $shadow-card;
+    border: 1px solid $border-gray;
+    animation: fadeIn 0.6s ease-out forwards;
+    opacity: 0;
+    @include respond(phone) {
+      padding: 10px;
+      }
+
+    &:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: $shadow-elegant;
+    }
+
+    .user-content {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      @include respond(phone) {
+      gap: 6px;
+      }
+    }
+
+    .user-avatar {
+      position: relative;
+      overflow: hidden;
+      border-radius: 50%;
+      border: 4px solid rgba(220, 38, 38, 0.2);
+      transition: $transition-smooth;
+      width: 35px;
+      height: 35px;
+      flex-shrink: 0;
+      @include respond(phone) {
+      width: 30px;
+      height: 30px;
+      }
+
+      &:hover {
+        border-color: $primary-red;
+        box-shadow: $shadow-glow;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+    }
+
+    .user-info {
+      flex: 1;
+      min-width: 0;
+
+      h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: $dark-gray;
+        margin-bottom: 0.25rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        @include respond(phone) {
+      font-size: 14px;
+      }
+      }
+
+      .username {
+        font-size: 0.875rem;
+        color: $primary-red;
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+      }
+
+      .bio {
+        font-size: 0.875rem;
+        color: $gray;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    }
+
+    .follow-button {
+      position: relative;
+      padding: 0.5rem 1.5rem;
+      border-radius: 9999px;
+      font-weight: 500;
+      transition: $transition-smooth;
+      overflow: hidden;
+      background: linear-gradient(135deg, $primary-red, $primary-red-glow);
+      color: $white;
+      border: 2px solid transparent;
+      cursor: pointer;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: $shadow-glow;
+      }
+
+      &.following {
+        background: $white;
+        color: $primary-red;
+        border-color: $primary-red;
+
+        &:hover {
+          background: $primary-red;
+          color: $white;
+        }
+      }
+    }
+  }
+
+  .stats-footer {
+    margin-top: 3rem;
+    text-align: center;
+    animation: fadeIn 0.6s ease-out forwards;
+    animation-delay: 600ms;
+    opacity: 0;
+
+    .stats-container {
+      display: inline-flex;
+      align-items: center;
+      gap: 2rem;
+      background: $white;
+      border-radius: 1rem;
+      padding: 1rem 2rem;
+      box-shadow: $shadow-card;
+      border: 1px solid $border-gray;
+
+      .stat-item {
+        text-align: center;
+
+        .stat-number {
+          font-size: 1.5rem;
+          font-weight: bold;
+          color: $primary-red;
+        }
+
+        .stat-label {
+          font-size: 0.875rem;
+          color: $gray;
+        }
+      }
+
+      .stat-divider {
+        width: 1px;
+        height: 2rem;
+        background: $border-gray;
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.05) translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(220, 38, 38, 0.4);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

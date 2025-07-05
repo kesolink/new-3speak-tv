@@ -15,12 +15,14 @@ import "ldrs/react/Leapfrog.css";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaVideo } from 'react-icons/fa';
+import Follower from "../components/Userprofilepage/Follower";
 
 function ProfilePage() {
   const { user, isProcessing, title : processTitle, updateProcessing, authenticated } = useAppStore();
   const [follower, setFollower] = useState(null);
   const [processing, setProcessing] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
+  const [show, setShow] = useState("video")
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,6 +48,7 @@ function ProfilePage() {
   const getFollowersCount = async (user) => {
     try {
       const follower = await getFollowers(user);
+      console.log(follower)
       setFollower(follower);
     } catch (err) {
       console.log(err);
@@ -105,7 +108,7 @@ function ProfilePage() {
     if (!authenticated) {
       toast.error("Login to upload video");
     } else {
-      navigate(`/upload`);
+      navigate(`/studio`);
     }
   };
 
@@ -123,13 +126,13 @@ function ProfilePage() {
       </div>
       <div className="toggle-wrap">
         <div className="wrap">
-          <span className="vn">Videos</span>
+          <span className="vn" onClick={()=>{setShow("video")}}>Videos</span>
           <Link to="/draft">Edit Video</Link>
           <span onClick={() => handleWalletNavigate(user)}>Wallet</span>
         </div>
 
         <div className="wrap-in">
-          <span className="followers">
+          <span className="followers" onClick={()=>{setShow("follower")}}>
             Followers{" "}
             {follower?.follower_count !== undefined ? (
               follower.follower_count
@@ -175,12 +178,13 @@ function ProfilePage() {
                 </div>
               </div>
             )}
-            <Cards
+           {show === "video" ? <Cards
               videos={videos}
               loading={loading}
               error={error}
               className="custom-video-feed"
-            />
+            /> :
+            <Follower count={follower} />}
           </>
         )}
       </div>

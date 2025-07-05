@@ -85,3 +85,44 @@ export async function getUersContent(author, permlink) {
         return null;
     }
   }
+
+  export const getRewardPool = async () => {
+  try {
+    const rewardFund = await client.database.call('get_reward_fund', ['post']);
+    const rewardPool = await client.database.call('get_current_median_history_price');
+    
+    return {
+      reward_balance: parseFloat(rewardFund.reward_balance.split(' ')[0]),
+      recent_claims: parseFloat(rewardFund.recent_claims),
+      hive_price: parseFloat(rewardPool.base.split(' ')[0]) / parseFloat(rewardPool.quote.split(' ')[0])
+    };
+  } catch (error) {
+    console.error("Error fetching reward pool:", error);
+    return {
+      reward_balance: 0,
+      recent_claims: 0,
+      hive_price: 0
+    };
+  }
+};
+
+export async function getFollowers(username, start = '', limit = 100) {
+  try {
+    const result = await client.call('condenser_api', 'get_followers', [username, start, 'blog', limit]);
+    return result.map(f => f.follower);
+  } catch (e) {
+    console.error('Error getting followers:', e);
+    return [];
+  }
+}
+
+// Get following
+export async function getFollowing(username, start = '', limit = 100) {
+  try {
+    const result = await client.call('condenser_api', 'get_following', [username, start, 'blog', limit]);
+    return result.map(f => f.following);
+  } catch (e) {
+    console.error('Error getting following:', e);
+    return [];
+  }
+}

@@ -169,10 +169,19 @@ const UpvoteTooltip = ({ author, permlink, showTooltip, setShowTooltip, setIsVot
           <p>Vote Weight: {weight}%</p>
           <div className="wrap">
             {isLoading ? (
-              <TailChase className="loader-circle" size="15" speed="1.5" color="red" />
+              <div className='wrap-circle'><TailChase className="loader-circle" size="15" speed="1.5" color="red" /></div>
             ) : (
               <IoChevronUpCircleOutline size={30} onClick={handleVote} />
             )}
+
+            {/* {isLoading ? (
+              <TailChase className="loader-circle" size="15" speed="1.5" color="red" />
+              // <TailChase className="loader-circle" size="15" speed="1.5" color="red" />
+            ) : (
+              // <IoChevronUpCircleOutline size={30} onClick={handleVote} />
+              <TailChase className="loader-circle" size="15" speed="1.5" color="red" />
+            )} */}
+            
             <input
               type="range"
               min="1"

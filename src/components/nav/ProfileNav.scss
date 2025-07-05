@@ -52,72 +52,107 @@
         // transform: translateX(-50%);
         background: white;
         margin-bottom: 8px;
-
       }
-      .username{
+      .username {
         text-align: center;
         color: #fff;
         font-weight: 600;
-        
       }
-      .power-wrap{
+      .power-wrap {
         display: flex;
         align-items: center;
         gap: 10px;
         margin-top: 8px;
-        .wrap{
-          display: flex;
-          align-items: center;
-          gap: 3px;
-          padding: 3px 6px;
-          border-radius: 7px;
-          font-size: 12.3px;
-          background-color: #fff;
+        position: relative;
+        .wrap-in {
+          position: relative;
+
+          .tooltip {
+            position: absolute;
+            bottom: 125%; /* Position above the text */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            white-space: nowrap;
+            font-size: 14px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+            font-size: 12px;
+          }
+
+          .tooltip-arrow {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid #333;
+          }
+
+          .wrap {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            padding: 3px 6px;
+            border-radius: 7px;
+            font-size: 12.3px;
+            background-color: #fff;
+            &:hover + .tooltip {
+              opacity: 1;
+              pointer-events: auto;
+            }
+          }
         }
       }
     }
-    .list-wrap{
+    .list-wrap {
       padding: 0px 20px;
-      color:rgb(90, 90, 90);
+      color: rgb(90, 90, 90);
       font-weight: 500;
       font-size: 14px;
-      .wrap{
+      .wrap {
         display: flex;
-    padding: 15px 0;
-    // background-color: #cccccc83;
-    // width: 100%;
-    // background: red;
-    border-radius: 4px;
-    align-items: center;
-    // margin-bottom: 20px;
-    width: fit-content;
-    flex-wrap: wrap;
-    cursor: pointer;
-    &.dropdown-parent{
-      position: relative;
-    }
-        span{
+        padding: 15px 0;
+        // background-color: #cccccc83;
+        // width: 100%;
+        // background: red;
+        border-radius: 4px;
+        align-items: center;
+        // margin-bottom: 20px;
+        width: fit-content;
+        flex-wrap: wrap;
+        cursor: pointer;
+        &.dropdown-parent {
+          position: relative;
+        }
+        span {
           font-size: 14px;
           font-weight: 500;
         }
-        .icon{
+        .icon {
           width: 25px;
           margin-right: 12px;
         }
-
       }
-
     }
-    .logo-wrap{
+    .logo-wrap {
       display: flex;
       align-items: center;
       justify-content: center;
       margin-top: 20px;
-      .logo{
+      .logo {
         width: 70%;
       }
     }
-    .support-wrap{
+    .support-wrap {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -129,20 +164,19 @@
       right: 20px;
       cursor: pointer;
       font-size: 16px;
-
     }
-    
   }
   .dropdown-menu {
     position: absolute;
     left: 0px;
     top: 40px;
-  
+
     // margin-top: 0.5rem; // mt-2
     width: 12rem; // w-48
     background-color: #fff; // bg-white
     border-radius: 0.5rem; // rounded-lg
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); // shadow-lg
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1); // shadow-lg
     padding: 0.5rem 0; // py-2
     padding-top: 15px;
     border: 1px solid #e5e7eb; // border-gray-200
@@ -153,9 +187,8 @@
       right: 20px;
       cursor: pointer;
       font-size: 16px;
-
     }
-  
+
     .list {
       display: block; // block
       display: flex;
@@ -165,15 +198,23 @@
       color: #374151; // text-gray-700
       text-decoration: none;
       font-size: 13.5px;
-      img{
+      img {
         width: 20px;
         height: 20px;
         border-radius: 50%;
       }
-  
+
       &:hover {
         background-color: #7a96ce2c; // hover:bg-gray-100
       }
+    }
+    button{
+      margin: 0px 16px;
+      background: #E32933;
+      color: #fff;
+      border: none;
+      padding: 2px 4px;
+      border-radius: 4px;
     }
   }
 }

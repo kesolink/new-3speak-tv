@@ -13,7 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 // import { has3SpeakPostAuth } from '../../utils/hiveUtils';
 function KeyChainLogin() {
   const client = axios.create({});
-  const { initializeAuth, setActiveUser, switchAccount, clearAccount } = useAppStore();
+  const { initializeAuth, setActiveUser, switchAccount, clearAccount, LogOut, user } = useAppStore();
   const studioEndPoint = "https://studio.3speak.tv";
   const [username, setUsername] = useState('');
   const [accessToken, setAccessToken] = useState("");
@@ -91,6 +91,16 @@ function KeyChainLogin() {
     setAccountList(refreshed);
   };
 
+  const handleClearAccount = (e, userSelected)=>{
+    e.stopPropagation();
+    removeAccount(userSelected);
+    if(user === userSelected){
+      LogOut()
+    }
+
+
+  }
+
   
   return (
     <div className="login-container">
@@ -124,7 +134,7 @@ function KeyChainLogin() {
                   <div key={idx} className='wrap' onClick={() => handleSwitchAccount(list.username)}>
                     <img src={`https://images.hive.blog/u/${list.username}/avatar`} alt={list.username} />
                     <span>{list.username}</span>
-                    <LuLogOut size={12} onClick={(e) => { e.stopPropagation(); removeAccount(list.username); }} />
+                    <LuLogOut size={12} onClick={(e) => handleClearAccount(e, list.username)} />
                   </div>
                 ))}
               </div>

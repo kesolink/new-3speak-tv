@@ -3,7 +3,7 @@ import "./Auth_modal.scss"
 import { KeychainSDK, KeychainKeyTypes} from 'keychain-sdk';
 import { useAppStore } from '../../lib/store';
 
-function Auth_modal({isOpen, close}) {
+function Auth_modal({isOpenAuth, closeAuth}) {
     const {user} = useAppStore();
   const  handleAuth3speak = async ()=>{
     try
@@ -19,7 +19,7 @@ function Auth_modal({isOpen, close}) {
 }
     
     const addaccountauthority = await keychain.addAccountAuthority( formParamsAsObject.data);
-    close()
+    closeAuth()
     console.log({ addaccountauthority });
   } catch (error) {
     console.log({ error });
@@ -27,20 +27,20 @@ function Auth_modal({isOpen, close}) {
 
   }
   return (
-    <div className={`modal ${isOpen ? "open" : ""}`}>
-      <div className="overlay" onClick={close}></div>
+    <div className={`modal ${isOpenAuth ? "open" : ""}`}>
+      <div className="overlay" onClick={closeAuth}></div>
       <div
-        className={`modal-content auth-bg ${isOpen ? "open" : ""}`}
+        className={`modal-content auth-bg ${isOpenAuth ? "open" : ""}`}
         onClick={(e) => e.stopPropagation()} // Prevent click on modal from closing it
       >
         <div className="modal-header auth-bg">
-          <h2>Welcome to 3Speak!</h2>
-          <button className="close-btn auth-bg" onClick={close}>
+          <h2>Authorize 3Speak!</h2>
+          <button className="close-btn auth-bg" onClick={closeAuth}>
             &times;
           </button>
         </div>
         <div className="modal-body auth-bg">
-          <p>To start using 3peak we require your posting authority. This allows us to publish your uploaded videos to hive. You only have to grant us posting authority once.</p>
+          <p>To upload video on 3peak we require your posting authority. This allows us to publish your uploaded videos to hive. You only have to grant us posting authority once.</p>
           <button onClick={handleAuth3speak}>Authorize</button>
           
         </div>

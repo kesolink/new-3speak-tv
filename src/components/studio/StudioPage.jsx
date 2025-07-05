@@ -18,11 +18,13 @@ import 'ldrs/react/TailChase.css'
 import { useAppStore } from "../../lib/store";
 import Arrow from "./../../../public/images/arrow.png"
 import VideoPreview from "./VideoPreview"
+import Auth_modal from "../modal/Auth_modal";
+import { has3SpeakPostAuth } from "../../utils/hiveUtils";
 
 
 function StudioPage() {
  const client = axios.create({});
- const {updateProcessing} = useAppStore()
+ const {updateProcessing, user, authenticated} = useAppStore()
   const studioEndPoint = "https://studio.3speak.tv";
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -47,6 +49,7 @@ function StudioPage() {
   const [BeneficiaryList, setBeneficiaryList] = useState(2)
   const [list, setList] = useState([]);
   const [remaingPercent, setRemaingPercent] = useState (89)
+  const [isOpenAuth, setIsOpenAuth] = useState(false)
   
   
   console.log("accesstokrn=====>", accessToken)
@@ -85,6 +88,24 @@ function StudioPage() {
   const toggleBeneficiaryModal = ()=>{
     setBeneficiaryOpen( (prev)=> !prev)
   }
+  const toggleUploadModalAuth = ()=>{
+    setIsOpenAuth( (prev)=> !prev)
+  }
+
+  useEffect(()=>{
+    checkPostAuth(user);
+  },[])
+
+
+  const  checkPostAuth= async(username)=>{
+        if(!authenticated){
+          return
+        }
+        const hasAuth = await has3SpeakPostAuth(username);
+        if (!hasAuth) {
+          setIsOpenAuth(true);
+        }
+      }
 
 
   const handleSelect = (e)=>{
@@ -166,6 +187,8 @@ function StudioPage() {
            Click to start the upload.
           <br />
           Max. Filesize is 5GB. Note: Your video will not be encoded if it is above the size limit!
+          <br />
+          ⚠️ Video file with .mvs is not allowed
         </p>
       </div>}
       <div className="video-detail-wrap">
@@ -185,9 +208,18 @@ function StudioPage() {
         <div className="input-group">
           <label htmlFor="">Tag</label>
           <input type="text" value={tagsInputValue} onChange={(e) => {setTagsInputValue(e.target.value.toLowerCase()); setTagsPreview(e.target.value.toLowerCase().trim().split(/\s+/));}}  />
+          
           <div className="wrap">
           <span>Separate multiple tags with </span> <span>Space</span>
           </div>
+          {/* Show the tags */}
+        <div className="preview-tags">
+        {tagsPreview &&<span> {tagsPreview.map((item, index) => (
+      <span className="item" key={index} style={{ marginRight: '8px' }}>
+        {item}
+      </span>
+    ))}</span>}
+        </div>
         </div>
 
         <div className="community-wrap" onClick={openCommunityModal}>
@@ -223,7 +255,7 @@ function StudioPage() {
         </div>
 
         <div className="submit-btn-wrap">
-        <button onClick={()=>{console.log("description===>", description); handleSubmitDetails()}}>{loading  ? <span className="wrap-loader" >Processing <TailChase size="15" speed="1.75" color="white" /></span> : "Submit Details"}</button>
+        <button onClick={()=>{console.log("description===>", description); handleSubmitDetails()}}>{loading  ? <span className="wrap-loader" >Processing <TailChase size="15" speed="1.75" color="white" /></span> : "Post Video"}</button>
         </div>
 
         </div>
@@ -290,6 +322,7 @@ function StudioPage() {
   setRemaingPercent={setRemaingPercent}
   remaingPercent={remaingPercent}
   />  }
+  {isOpenAuth && <Auth_modal  isOpenAuth={isOpenAuth} closeAuth={toggleUploadModalAuth} />}
     </>
   );
 }

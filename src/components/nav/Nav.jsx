@@ -95,7 +95,7 @@ function Nav({ setSideBar, toggleProfileNav }) {
               <Link to="/" className="side-link-n" onClick={handleNav}>
                 <MdOutlineDashboard className="icon" /> <span>Home</span>
               </Link>
-              {authenticated && <Link to="/upload" className="side-link-n" onClick={handleNav}>
+              {authenticated && <Link to="/studio" className="side-link-n" onClick={handleNav}>
                 <IoCloudUploadSharp className="icon" /> <span>Upload Video</span>
               </Link>}
               <Link to="/firstupload" className="side-link-n" onClick={handleNav}>
@@ -111,8 +111,11 @@ function Nav({ setSideBar, toggleProfileNav }) {
               <Link to="/communities" className="side-link-n" onClick={handleNav}>
                 <MdOutlineDynamicFeed className="icon" /> <span>Communities</span>
               </Link>
-              <Link to="/leaderboard" className="side-link-n" onClick={handleNav}>
+              {/* <Link to="/leaderboard" className="side-link-n" onClick={handleNav}>
                 <MdOutlineLeaderboard className="icon" /> <span>Leaderboard</span>
+              </Link> */}
+              <Link to="/about" className="side-link-n" onClick={handleNav}>
+                <MdOutlineLeaderboard className="icon" /> <span>About</span>
               </Link>
               {/* <div className="side-link-n" onClick={handleNav}>
                 <HiInformationCircle className="icon" /> <span>About 3speak</span>

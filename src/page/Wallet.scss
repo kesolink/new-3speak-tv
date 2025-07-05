@@ -209,6 +209,10 @@ $indigo-500: #6366f1;
             border: 1px solid $gray-300;
             border-radius: 0.5rem;
             box-sizing: border-box;
+            
+            @include mix.respond(phone) {
+              font-size: 16px;
+            }
 
             &:focus {
               outline: none;

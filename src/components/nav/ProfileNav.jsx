@@ -26,7 +26,7 @@ function ProfileNav({isVisible, onclose}) {
         useEffect(()=>{
           const getAccountlist = JSON.parse(localStorage.getItem("accountsList")) || [];
           setAccountList(getAccountlist)
-        },[])
+        },[isVisible])
 
     const handlewallletNavigation = ()=>{
       navigate(`/wallet/${user}`)
@@ -55,7 +55,7 @@ function ProfileNav({isVisible, onclose}) {
   }, []);
 
   return (
-    <div className={`profilenav-container ${isVisible ? 'visible' : ''}`} onClick={onclose}>
+    <div className={`profilenav-container ${isVisible ? 'visible' : ''}`} onClick={()=>{onclose(); setShowDropdown(false)}}>
         <div className="profile-wrap" onClick={(e) => e.stopPropagation()}>
           
            <div className='pro-top-wrap'style={{ backgroundImage: `url(https://images.hive.blog/u/${user}/cover)`, backgroundSize: "cover", backgroundPosition: "center",}}> 
@@ -63,28 +63,37 @@ function ProfileNav({isVisible, onclose}) {
             <img className='avatar-img' src={`https://images.hive.blog/u/${user}/avatar`}  alt="" />
             <span className='username'>{user}</span>
             <div className="power-wrap">
+            <div className="wrap-in">
               <div className="wrap">
-              <MdOutlineKeyboardArrowUp />
-              <span>{votingPower}% {" "} VP</span>
+                <MdOutlineKeyboardArrowUp />
+                <span>{votingPower}% {" "} VP</span>
               </div>
+              <div class="tooltip">
+                Voting Power
+                <div class="tooltip-arrow"></div>
+              </div>
+            </div>
+            <div className="wrap-in">
               <div className="wrap">
               <MdKeyboardArrowDown />
               <span>{rc}% {" "} RC</span>
               </div>
-              {/* <div className="wrap">
-              <ImPower />
-              <span>100%</span>
-              </div> */}
+              <div class="tooltip">
+                Resource Credit
+                <div class="tooltip-arrow"></div>
+              </div>
+              </div>
+
             </div>
            </div>
            <div className="list-wrap">
           <Link to="/profile"  className="wrap" onClick={onclose}>
             <IoMdPerson className="icon" /> <span>My Channel</span>
           </Link>
-          <Link  className="wrap" onClick={onclose}>
+          <Link to="/draft" className="wrap" onClick={onclose}>
             <TiThList className="icon" /> <span>Playlist</span>
           </Link>
-          <Link  to="/upload" className="wrap" onClick={onclose}>
+          <Link  to="/studio" className="wrap" onClick={onclose}>
             <MdCloudUpload className="icon" /> <span>Upload Video</span>
           </Link>
           <div className="wrap" onClick={()=>{handlewallletNavigation(); onclose()}}>
@@ -95,8 +104,9 @@ function ProfileNav({isVisible, onclose}) {
             {showDropdown && accountList.length > 0 &&(<div className="dropdown-menu">
               <span className='close-btn' onClick={() => setShowDropdown(!showDropdown)}>x</span>
               {accountList.map((list, index)=>(
-                <div key={index} className="list" onClick={(e)=>{e.stopPropagation(); handleSwitchAccount(list.username); setShowDropdown(!showDropdown)}}> <img src={`https://images.hive.blog/u/${list.username}/avatar`} alt="" /> <span>{list.username}</span></div>
+                <div key={index} className="list" onClick={(e)=>{e.stopPropagation(); handleSwitchAccount(list.username); setShowDropdown(!showDropdown); onclose()}}> <img src={`https://images.hive.blog/u/${list.username}/avatar`} alt="" /> <span>{list.username}</span></div>
               ))}
+              <Link to="/login" onClick={()=>{onclose()}}><button>Add Account</button></Link>
             </div>)}
           </div> 
           <Link  className="wrap">
@@ -109,11 +119,18 @@ function ProfileNav({isVisible, onclose}) {
            <div className="logo-wrap">
            <img className="logo" src={logo} alt="" />
            </div>
-           <div className="support-wrap">
-           <FaDiscord />
-           <SiTelegram />
-           <FaSquareXTwitter />
-           </div>
+        <div className="support-wrap">
+          <a href="https://x.com/3speaktv?utm_source=3speak.tv" className="social-link" target="_blank" rel="noopener noreferrer">
+            <FaDiscord size={30} />
+          </a>
+          <a href="https://discord.com/invite/NSFS2VGj83" className="social-link" target="_blank" rel="noopener noreferrer">
+            <FaSquareXTwitter size={30} />
+          </a>
+          <a href="https://t.me/threespeak?utm_source=3speak.tv" className="social-link" target="_blank" rel="noopener noreferrer">
+            <SiTelegram size={30} />
+          </a>
+
+        </div>
            
            <span className='close-btn' onClick={onclose}>X</span>
         </div>

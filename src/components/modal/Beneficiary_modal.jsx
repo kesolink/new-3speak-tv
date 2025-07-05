@@ -155,7 +155,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
               <input
                 type="text"
                 value={account}
-                onChange={(e) => setAccount(e.target.value)}
+                onChange={(e) => setAccount(e.target.value.toLowerCase())}
               />
             </div>
             <div className="num-wrap">

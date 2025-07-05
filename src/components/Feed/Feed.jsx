@@ -48,7 +48,7 @@ function Feed() {
         <Cards videos={videos} loading={loading} error={error} className="custom-video-feed" />
       }
     </>
-    {isOpen && <Auth_modal  isOpen={isOpen} close={toggleUploadModal} />}
+    {/* {isOpen && <Auth_modal  isOpen={isOpen} close={toggleUploadModal} />} */}
     </>
   );
 }

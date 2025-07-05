@@ -24,7 +24,7 @@ const Sidebar = ({ sidebar }) => {
         <Link to="/" className="side-link">
           <MdOutlineDashboard className="icon" /> <span>Home</span>
         </Link>
-       {authenticated && <Link to="/upload" className="side-link">
+       {authenticated && <Link to="/studio" className="side-link">
           <IoCloudUploadSharp className="icon" /> <span>Upload Video</span>
         </Link>}
         <Link to="/firstupload" className="side-link">
@@ -40,12 +40,12 @@ const Sidebar = ({ sidebar }) => {
         <Link to="/communities" className="side-link">
           <MdOutlineDynamicFeed className="icon" /> <span>Communities</span>
         </Link>
-        <Link to="/leaderboard" className="side-link">
+        {/* <Link to="/leaderboard" className="side-link">
           <MdOutlineLeaderboard className="icon" /> <span>Leaderboard</span>
-        </Link>
-        <div className="side-link">
+        </Link> */}
+        <Link to="/about" className="side-link">
           <HiInformationCircle className="icon" /> <span>About 3speak</span>
-        </div>
+        </Link>
 
         <hr />
       </div>
