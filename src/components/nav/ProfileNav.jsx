@@ -104,7 +104,7 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount }) {
           <Link className="wrap" onClick={onclose}>
             <TiThList className="icon" /> <span>Playlist</span>
           </Link>
-          <Link to="/upload" className="wrap" onClick={onclose}>
+          <Link to="/studio" className="wrap" onClick={onclose}>
 
 
             <MdCloudUpload className="icon" /> <span>Upload Video</span>
