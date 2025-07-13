@@ -208,13 +208,17 @@
         background-color: #7a96ce2c; // hover:bg-gray-100
       }
     }
+
+
     button{
-      margin: 0px 16px;
-      background: #E32933;
-      color: #fff;
+      border-radius: 3px;
       border: none;
-      padding: 2px 4px;
-      border-radius: 4px;
+      padding: 3px 8px;
+      display: block;
+      margin: 0 auto;
+      background-color:  #E32933;
+      color: white;
+
     }
   }
 }

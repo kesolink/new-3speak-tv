@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@aioha/aioha": "^1.6.0-beta.1",
+    "@aioha/react-ui": "^1.6.0",
     "@apollo/client": "^3.13.5",
     "@ecency/render-helper": "^2.2.38",
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
@@ -29,6 +30,7 @@
     "dompurify": "^3.2.4",
     "echarts": "^5.6.0",
     "graphql": "^16.10.0",
+    "hive-auth-wrapper": "^1.0.0",
     "hive-content-renderer": "^1.0.3",
     "html-to-text": "^9.0.5",
     "js-md5": "^0.8.3",
@@ -38,6 +40,7 @@
     "lucide-react": "^0.503.0",
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
+    "qrcode.react": "^4.2.0",
     "quill": "^2.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

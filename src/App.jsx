@@ -30,14 +30,21 @@ import UserProfilePage from "./components/Userprofilepage/UserProfilePage";
 import DraftStudio from "./components/studio/DraftStudio";
 import EditVideo from "./page/EditVideo";
 import ScrollToTop from "./components/ScrollToTop";
+import AddAccount_modal from "./components/modal/AddAccount_modal";
+import TestingLogin3 from "./page/Login/TestingLogin3";
+// import TestingLogin from "./page/Login/TestingLogin";
 import AboutPage from "./components/LandingPage/AboutPage";
+
 
 function App() {
   const { initializeAuth, authenticated } = useAppStore();
   const [sidebar, setSideBar] = useState(true);
   const [profileNavVisible, setProfileNavVisible] = useState(false);
-  const [globalCloseRender, setGlobalCloseRender] = useState(false);
+
+  const [globalCloseRender, setGlobalCloseRender] = useState(false)
+  const [toggle, setToggle] = useState(false);
   const [reloadSwitch, setRelaodSwitch] = useState(false)
+
 
 
   useEffect(() => {
@@ -54,6 +61,10 @@ function App() {
     setProfileNavVisible((prev) => !prev);
     console.log(profileNavVisible);
   };
+
+  const toggleAddAccount = () => {
+    setToggle((prev) => !prev);
+  }
 
   return (
     <div onClick={()=> {setGlobalCloseRender(true)}}>
@@ -86,10 +97,12 @@ function App() {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/p/:user" element={<UserProfilePage />} />
             <Route path="/wallet/:user" element={<Wallet />} />
-            <Route path="/testing" element={<Testing />} />
+            <Route path="/test" element={<Testing />} />
           </Routes>
         </div>
-        <ProfileNav isVisible={profileNavVisible} onclose={toggleProfileNav} />
+        <ProfileNav isVisible={profileNavVisible} onclose={toggleProfileNav} toggleAddAccount={toggleAddAccount} />
+        {toggle && <AddAccount_modal close={toggleAddAccount} isOpen={toggle} /> }
+        
       </div>
     </div>
   );

@@ -8,21 +8,22 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getUersContent, getVotePower } from '../../utils/hiveUtils';
 import { TailChase } from 'ldrs/react';
 import 'ldrs/react/TailChase.css';
+import axios from 'axios';
+
+
 
 const client = new Client(['https://api.hive.blog']);
 
 const CardVoteTooltip = ({ author, permlink, showTooltip, setShowTooltip, setVotedPosts, cardStyle }) => {
-  const { user, authenticated } = useAppStore();
+  const { user, authenticated, clearAccount, LogOut } = useAppStore();
   const [votingPower, setVotingPower] = useState(100);
   const [weight, setWeight] = useState(100);
   const [voteValue, setVoteValue] = useState(0.0);
   const [accountData, setAccountData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const tooltipRef = useRef(null);
+  const accessToken = localStorage.getItem("access_token");
 
-  // console.log('UpvoteTooltip', { author, permlink, showTooltip });
-
-  // Close tooltip on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (tooltipRef.current && !tooltipRef.current.contains(e.target)) {
@@ -37,9 +38,8 @@ const CardVoteTooltip = ({ author, permlink, showTooltip, setShowTooltip, setVot
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showTooltip, setShowTooltip,  ]);
+  }, [showTooltip, setShowTooltip]);
 
-  // Fetch account & VP
   useEffect(() => {
     if (!user || !showTooltip) return;
 
@@ -60,7 +60,6 @@ const CardVoteTooltip = ({ author, permlink, showTooltip, setShowTooltip, setVot
     fetchAccountData();
   }, [user, showTooltip]);
 
-  // Recalculate when weight changes
   useEffect(() => {
     if (!accountData || !votingPower) return;
     const vp = parseFloat(votingPower) * 100;
@@ -104,20 +103,6 @@ const CardVoteTooltip = ({ author, permlink, showTooltip, setShowTooltip, setVot
     setIsLoading(true);
     const voteWeight = Math.round(weight * 100);
 
-    const votePayload = {
-      operations: [
-        [
-          'vote',
-          {
-            voter: user,
-            author,
-            permlink,
-            weight: voteWeight,
-          },
-        ],
-      ],
-    };
-
     try {
       const data = await getUersContent(author, permlink);
       const existingVote = data.active_votes.find((vote) => vote.voter === user);
@@ -130,26 +115,29 @@ const CardVoteTooltip = ({ author, permlink, showTooltip, setShowTooltip, setVot
         }
       }
 
-      if (window.hive_keychain) {
-        window.hive_keychain.requestBroadcast(user, votePayload.operations, 'Posting', (response) => {
-          if (response.success) {
-            toast.success('Vote successful');
-            setIsLoading(false);
-            setShowTooltip(false);
-            // console.log(showTooltip)
-            setVotedPosts((prev) => [...prev, `${author}/${permlink}`]);
-            
-          } else {
-            toast.error('Vote failed, please try again');
-            setIsLoading(false);
-            setShowTooltip(false);
-          }
-        });
-      } else {
-        toast.info('Hive Keychain not found.');
-        setIsLoading(false);
-        setShowTooltip(false);
+
+      const response = await axios.post('https://studio.3speak.tv/mobile/vote', {
+              author,
+              permlink,
+              weight: voteWeight
+            }, {
+              headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+              }
+            });
+
+            console.log('Vote response:', response.data);
+      if (response.data.success) {
+        toast.success('Vote successful');
+        setVotedPosts((prev) => [...prev, `${author}/${permlink}`]);
       }
+      setIsLoading(false);
+         setShowTooltip(false);
+
+
+
+
     } catch (err) {
       console.error('Vote failed:', err);
       toast.error('Vote failed, please try again');
@@ -159,9 +147,9 @@ const CardVoteTooltip = ({ author, permlink, showTooltip, setShowTooltip, setVot
   };
 
   return (
-    <div className="upvote-tooltip-wrap" ref={tooltipRef} onClick={(e) =>{ e.preventDefault()}}>
+    <div className="upvote-tooltip-wrap" ref={tooltipRef} onClick={(e) => e.preventDefault()}>
       {showTooltip && (
-        <div className="tooltip-box card" >
+        <div className="tooltip-box card">
           <p>Vote Weight: {weight}%</p>
           <div className="wrap">
             {isLoading ? (

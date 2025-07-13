@@ -6,8 +6,6 @@ import { FaHeart } from "react-icons/fa";
 import PropTypes from "prop-types";
 import "./Cards.scss";
 import { useAppStore } from "../../lib/store";
-import { toast } from "react-toastify";
-import { getUersContent } from "../../utils/hiveUtils";
 import { useState } from "react";
 import UpvoteTooltip from "../tooltip/UpvoteTooltip";
 import img from "../../assets/image/deleted.jpg";
@@ -21,18 +19,15 @@ function Cards({
   error = null,
   defaultThumbnail = "default_thumb.jpg",
   className = "",
-  truncateLength = 65,
 }) {
   const { user, authenticated } = useAppStore();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
   const [activeTooltipIndex, setActiveTooltipIndex] = useState(null);
   const [selectedPost, setSelectedPost] = useState({
     username: "",
     permlink: "",
   });
   const [votedPosts, setVotedPosts] = useState([]);
-  const [cardStyle, setCardStyle] = useState(true);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -144,7 +139,7 @@ function Cards({
               author={selectedPost.username}
               permlink={selectedPost.permlink}
               setVotedPosts={setVotedPosts}
-              cardStyle={cardStyle}
+
             />
           </Link>
         );
