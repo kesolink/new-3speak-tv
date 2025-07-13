@@ -175,5 +175,15 @@
         background-color: #7a96ce2c; // hover:bg-gray-100
       }
     }
+
+    button{
+      border-radius: 3px;
+      border: none;
+      padding: 3px 8px;
+      display: block;
+      margin: 0 auto;
+      background-color: #2196f3;
+      color: white;
+    }
   }
 }

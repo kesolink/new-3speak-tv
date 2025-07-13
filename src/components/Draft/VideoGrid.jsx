@@ -34,7 +34,7 @@ const VideoGrid = ({ videos }) => {
     toast.success(`Publishing video coming soon`);
   };
 
-  console.log(filteredVideos)
+  // console.log(filteredVideos)
 
   return (
     <div>

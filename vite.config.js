@@ -33,7 +33,8 @@ export default defineConfig({
         global: "globalThis", // Fixes global scope issues
       },
     },
-    include: ["react-quilljs", "quill"], // Explicitly optimize these deps
+    exclude: ['@metamask/providers', 'web3'],
+    include: ["react-quilljs", "quill", "qrcode.react", "hive-auth-wrapper"], // Explicitly optimize these deps
   },
   build: {
     commonjsOptions: {

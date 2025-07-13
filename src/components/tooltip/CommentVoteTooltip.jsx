@@ -8,19 +8,20 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getUersContent, getVotePower } from '../../utils/hiveUtils';
 import { TailChase } from 'ldrs/react';
 import 'ldrs/react/TailChase.css';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const client = new Client(['https://api.hive.blog']);
 
 const CommentVoteTooltip = ({ author, permlink, showTooltip, setShowTooltip, setCommentList, setActiveTooltipPermlink }) => {
-  const { user, authenticated } = useAppStore();
+  const { user, authenticated, LogOut } = useAppStore();
   const [votingPower, setVotingPower] = useState(100);
   const [weight, setWeight] = useState(100);
   const [voteValue, setVoteValue] = useState(0.0);
   const [accountData, setAccountData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const tooltipRef = useRef(null);
-
-//   console.log('UpvoteTooltip', { author, permlink, showTooltip });
+  const accessToken = localStorage.getItem("access_token");
 
   // Close tooltip on outside click
   useEffect(() => {
@@ -115,42 +116,29 @@ const handleVote = async () => {
       return;
     }
 
-    // Optimistic update before the actual vote
-    setCommentList(prev => updateCommentsRecursively(prev, permlink));
 
-    if (window.hive_keychain) {
-      window.hive_keychain.requestBroadcast(
-        user,
-        [
-          [
-            'vote',
-            {
-              voter: user,
+    const response = await axios.post('https://studio.3speak.tv/mobile/vote', {
               author,
               permlink,
-              weight: voteWeight,
-            },
-          ],
-        ],
-        'Posting',
-        (response) => {
-          if (response.success) {
-            toast.success('Vote successful');
-          } else {
-            toast.error('Vote failed, please try again');
-            // Roll back optimistic update if vote fails
-            setCommentList(prev => updateCommentsRecursively(prev, permlink, true));
-          }
-          setIsLoading(false);
-          setShowTooltip(false);
-          setActiveTooltipPermlink(null);
-        }
-      );
-    } else {
-      toast.info('Hive Keychain not found.');
+              weight: voteWeight
+            }, {
+              headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+              }
+            });
+
+            console.log('Vote response:', response.data);
+      if (response.data.success) {
+        toast.success('Vote successful');
+        setCommentList(prev => updateCommentsRecursively(prev, permlink));
+
+      }
       setIsLoading(false);
       setShowTooltip(false);
-    }
+      setActiveTooltipPermlink(null);
+  
+
   } catch (err) {
     console.error('Vote failed:', err);
     toast.error('Vote failed, please try again');

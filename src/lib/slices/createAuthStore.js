@@ -2,6 +2,7 @@ import axios from "axios";
 import { api } from "../../utils/api";
 import { API_URL_FROM_WEST } from "../../utils/config";
 import {persist} from "zustand/middleware"
+import aioha from "../../hive-api/aioha";
 
 const LOCAL_STORAGE_USER_ID_KEY = "user_id";
 
@@ -36,6 +37,14 @@ export const createAuthUserSlice = (set) => ({
   
 
   switchAccount: (username) => {
+    const switched = aioha.switchUser(username)
+    if (switched) {
+    const newUser = aioha.getCurrentUser();
+    console.log('Switched to:', newUser);
+    
+  } else {
+    console.warn('Switch failed. User may not be authenticated.');
+  }
     const account = JSON.parse(localStorage.getItem("accountsList")).find(acc => acc.username === username);
     console.log(account)
     
@@ -48,29 +57,36 @@ export const createAuthUserSlice = (set) => ({
 
   
 
-  LogOut: ()=>{
-      if (typeof window !== "undefined") {
-        // Clear local storage
-        window.localStorage.removeItem("user_id");
-        window.localStorage.removeItem("access_token");
-    
-        // Reset authentication state in the store
-        set({
-          authenticated: false,
-          userId: null,
-          allowAccess: null,
-          userDetails: null,
-          listAccounts: [],
-          isProcessing: null,
-        });
-    
-        console.log("User has been logged out successfully.");
-      }
+  LogOut: (user) => {
+
+    if (typeof window !== "undefined") {
+      aioha.logout()
+      const accounts = JSON.parse(localStorage.getItem("accountsList") || "[]");
+      const updatedAccounts = accounts.filter(acc => acc.username !== user);
+      localStorage.setItem("accountsList", JSON.stringify(updatedAccounts));
+      // Clear local storage
+      window.localStorage.removeItem("user_id");
+      window.localStorage.removeItem("access_token");
+
+      // Reset authentication state in the store
+      set({
+        authenticated: false,
+        userId: null,
+        allowAccess: null,
+        userDetails: null,
+        listAccounts: [],
+        isProcessing: null,
+      });
+
+
+      console.log("User has been logged out successfully.");
+    }
   },
 
 
   //The clearAccount delete the user acces-token from the local storage.
   clearAccount: (user) => {
+     aioha.removeOtherLogin(user);
     const accounts = JSON.parse(localStorage.getItem("accountsList") || "[]");
     const updatedAccounts = accounts.filter(acc => acc.username !== user);
     localStorage.setItem("accountsList", JSON.stringify(updatedAccounts));

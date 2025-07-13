@@ -1,0 +1,97 @@
+.hive-auth-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.hive-auth-logo {
+  max-width: 100px;
+  margin-bottom: 1.5rem;
+}
+
+.hive-auth-title {
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.hive-auth-input-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.hive-auth-input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.hive-auth-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.hive-auth-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #f5700a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.hive-auth-button:hover {
+  background-color: #e05d00;
+}
+
+.hive-auth-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.hive-auth-error {
+  color: #e74c3c;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background-color: #fdecea;
+  border-radius: 4px;
+}
+
+.hive-auth-footer {
+  margin-top: 1.5rem;
+  color: #777;
+  font-size: 0.875rem;
+}
+
+.hive-auth-spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
