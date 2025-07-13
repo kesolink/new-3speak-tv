@@ -69,25 +69,34 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount }) {
     <div className={`profilenav-container ${isVisible ? 'visible' : ''}`} onClick={onclose}>
       <div className="profile-wrap" onClick={(e) => e.stopPropagation()}>
 
-        <div className='pro-top-wrap' style={{ backgroundImage: `url(https://images.hive.blog/u/${user}/cover)`, backgroundSize: "cover", backgroundPosition: "center", }}>
-          {/* <img className='' src={getUserProfile?.images?.cover} alt="" /> */}
-          <img className='avatar-img' src={`https://images.hive.blog/u/${user}/avatar`} alt="" />
-          <span className='username'>{user}</span>
-          <div className="power-wrap">
-            <div className="wrap">
-              <MdOutlineKeyboardArrowUp />
-              <span>{votingPower}% {" "} VP</span>
+        <div className='pro-top-wrap'style={{ backgroundImage: `url(https://images.hive.blog/u/${user}/cover)`, backgroundSize: "cover", backgroundPosition: "center",}}> 
+            {/* <img className='' src={getUserProfile?.images?.cover} alt="" /> */}
+            <img className='avatar-img' src={`https://images.hive.blog/u/${user}/avatar`}  alt="" />
+            <span className='username'>{user}</span>
+            <div className="power-wrap">
+            <div className="wrap-in">
+              <div className="wrap">
+                <MdOutlineKeyboardArrowUp />
+                <span>{votingPower}% {" "} VP</span>
+              </div>
+              <div class="tooltip">
+                Voting Power
+                <div class="tooltip-arrow"></div>
+              </div>
             </div>
-            <div className="wrap">
+            <div className="wrap-in">
+              <div className="wrap">
               <MdKeyboardArrowDown />
               <span>{rc}% {" "} RC</span>
+              </div>
+              <div class="tooltip">
+                Resource Credit
+                <div class="tooltip-arrow"></div>
+              </div>
+              </div>
+
             </div>
-            {/* <div className="wrap">
-              <ImPower />
-              <span>100%</span>
-              </div> */}
-          </div>
-        </div>
+           </div>
         <div className="list-wrap">
           <Link to="/profile" className="wrap" onClick={onclose}>
             <IoMdPerson className="icon" /> <span>My Channel</span>
