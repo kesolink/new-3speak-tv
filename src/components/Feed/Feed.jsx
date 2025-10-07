@@ -17,11 +17,20 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 import Card3 from "../Cards/Card3"
 
 
-const fetchVideos = async ({ pageParam = 1 }) => {
-  const res = await axios.get(
-    `https://3speak.tv/apiv2/feeds/new?page=${pageParam}`
-  );
-  return res.data;
+
+const fetchVideos = async ({ pageParam = 0 }) => {
+  let url;
+
+  if (pageParam === 0) {
+    // 🧩 First load
+    url = `https://3speak.tv/apiv2/feeds/home?page=${pageParam}`;
+  } else {
+    // 🧩 Only two "more" pages are available: 64 and 128
+    url = `https://3speak.tv/api/feed/more?skip=${pageParam}`;
+  }
+
+  const res = await axios.get(url);
+  return res.data.trends || res.data;
 };
 
 function Feed() {
@@ -33,21 +42,26 @@ function Feed() {
   },[])
 
    const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-    isError,     
-  } = useInfiniteQuery({
-    queryKey: ["videos"],
-    queryFn: fetchVideos,
-    getNextPageParam: (lastPage, allPages) => {
-      // If last page has data, increment page
-      if (lastPage.length > 0) return allPages.length + 1;
-      return undefined; // stop fetching
-    },
-  });
+  data,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+  isLoading,
+  isError,
+} = useInfiniteQuery({
+  queryKey: ["home"],
+  queryFn: fetchVideos,
+  getNextPageParam: (lastPage, allPages) => {
+    // 🧠 Available skip values
+    const nextSkips = [64, 128];
+
+    // Determine next skip value
+    const next = nextSkips[allPages.length - 1];
+
+    // Stop after 128
+    return next || undefined;
+  },
+});
 
   useEffect(() => {
       const handleScroll = () => {
@@ -67,6 +81,7 @@ function Feed() {
   
     // Flatten all pages into a single array
     const videos = data?.pages.flat() || [];
+    console.log(videos)
 
 
  

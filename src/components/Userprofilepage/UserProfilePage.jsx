@@ -15,7 +15,6 @@ import Card3 from '../Cards/Card3';
 
 
 
-
 function UserProfilePage() {
     const { user } = useParams();
     const navigate = useNavigate()
@@ -26,31 +25,41 @@ function UserProfilePage() {
         getFollowersCount(user)
       },[])
 
+ const LIMIT = 100;
 
-       const fetchVideos = async ({ pageParam = 1 }) => {
-        const res = await axios.get(
-          `https://3speak.tv/apiv2/feeds/@${user}?page=${pageParam}`
-        );
-        return res.data;
-      };
+const fetchVideos = async ({ pageParam = 0 }) => {
+  let url;
+  if (pageParam === 0) {
+    // first 100 videos
+    url = `https://3speak.tv/apiv2/feeds/@${user}`;
+  } else {
+    // next batches
+    url = `https://3speak.tv/apiv2/feeds/@${user}/more?skip=${pageParam}`;
+  }
+
+  const res = await axios.get(url);
+  return res.data;
+};
+
       
-      const {
-          data,
-          fetchNextPage,
-          hasNextPage,
-          isFetchingNextPage,
-          isLoading,
-          isError,
-          refetch,     
-        } = useInfiniteQuery({
-          queryKey: ["videos"],
-          queryFn: fetchVideos,
-          getNextPageParam: (lastPage, allPages) => {
-            // If last page has data, increment page
-            if (lastPage.length > 0) return allPages.length + 1;
-            return undefined; // stop fetching
-          },
-        });
+const {
+  data,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+  isLoading,
+} = useInfiniteQuery({
+  queryKey: ["UserProfilePage", user],
+  queryFn: fetchVideos,
+  getNextPageParam: (lastPage, allPages) => {
+    // If the last page has items, calculate next skip value
+    if (lastPage.length > 0) {
+      return allPages.flat().length; // next skip = total items loaded so far
+    }
+    return undefined; // stop if no more data
+  },
+});
+
       
         useEffect(() => {
               const handleScroll = () => {
@@ -70,6 +79,7 @@ function UserProfilePage() {
           
             // Flatten all pages into a single array
             const videos = data?.pages.flat() || [];
+            console.log(videos)
 
 
       // const { loading, error, data } = useQuery(GET_SOCIAL_FEED_BY_CREATOR, {

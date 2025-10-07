@@ -30,6 +30,9 @@ import { TailChase } from 'ldrs/react'
 import 'ldrs/react/TailChase.css'
 import { getFollowers } from "../../hive-api/api";
 import UpvoteTooltip from "../tooltip/UpvoteTooltip";
+import axios from "axios";
+  import bs58 from "bs58";
+  import { Buffer } from "buffer";
 
 const PlayVideo = ({ videoDetails, author, permlink }) => {
   const { user, authenticated } = useAppStore();
@@ -48,6 +51,7 @@ const PlayVideo = ({ videoDetails, author, permlink }) => {
   const [voteValue, setVoteValue] = useState(0.0);
   const [weight, setWeight] = useState(100);
   const [view, setView] = useState(0)
+  const [speakData, setSpeakData]= useState(null)
   const navigate = useNavigate();
 
   dayjs.extend(relativeTime);
@@ -74,7 +78,7 @@ const getTooltipVoters = async () => {
     if (!data) return [];
     console.log(data)
 
-    setView(data.active_votes.length)
+    // setView(data.active_votes.length)
 
     if (data.active_votes) {
       setOptimisticVoteCount(data.active_votes.length);
@@ -122,6 +126,15 @@ const calculateVoteValue = async (account, percent) => {
         }
       };
 
+
+      const speakWatchData = async ()=>{
+        const res = await axios.get(`https://3speak.tv/apiv2/@${author}/${permlink}`)
+         console.log(res)
+         setSpeakData(res.data)
+        //  setVideoUrlSelected(res.data.playUrl)
+         setView(res.data.views)
+      }
+
  // Fetch account & VP
     useEffect(() => {
       const fetchAccountData = async () => {
@@ -137,6 +150,7 @@ const calculateVoteValue = async (account, percent) => {
         }
       };
       fetchAccountData();
+      speakWatchData()
     }, [ ]);
 
   useEffect(() => {
@@ -229,6 +243,7 @@ const calculateVoteValue = async (account, percent) => {
       setVideoUrlSelected(`https://ipfs-3speak.b-cdn.net/ipfs/${result}`);
     }
   }, [spkvideo]);
+
 
   if (loading) {
     return <BarLoader />;
@@ -330,6 +345,8 @@ const handleProfileNavigate = (user) => {
      const toggleTooltip = () => {
     setShowTooltip((prev)=> !prev)
   };
+
+  console.log(view)
 
   return (
     <>
