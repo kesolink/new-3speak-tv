@@ -12,6 +12,7 @@ import CardVoteTooltip from "../tooltip/CardVoteTooltip";
 import img from "../../assets/image/deleted.jpg";
 import { estimate, getVotePower } from "../../utils/hiveUtils";
 import LazyPayout from "../../page/LazyPayout";
+import { fixVideoThumbnail } from "../../utils/fixThumbnails";
 
 dayjs.extend(relativeTime);
 
@@ -20,7 +21,7 @@ function Card3({ videos = [], loading = false, error = null }) {
   const navigate = useNavigate();
   const [voteValue, setVoteValue] = useState(0.0);
   const [activeTooltipIndex, setActiveTooltipIndex] = useState(null);
-  const [votersNum, setVotersNum] = useState(null);
+  const [votersNum, setVotersNum] = useState({});
   const [selectedPost, setSelectedPost] = useState({
     username: "",
     permlink: "",
@@ -66,7 +67,7 @@ function Card3({ videos = [], loading = false, error = null }) {
   return (
     <div className="card-container">
       {videos.map((video, index) => {
-        const postKey = `${video.author?.username || video.author}/${
+        const postKey = `${video.author?.username || video.author || video.owner}/${
           video.permlink
         }`;
         const hasVoted = voteStatus[postKey] === true;
@@ -75,7 +76,7 @@ function Card3({ videos = [], loading = false, error = null }) {
 
         return (
           <Link
-            to={`/watch?v=${video.author?.username || video.author}/${
+            to={`/watch?v=${video.author?.username || video.author || video.owner}/${
               video.permlink
             }`}
             className="card"
@@ -85,10 +86,12 @@ function Card3({ videos = [], loading = false, error = null }) {
             {/* Thumbnail */}
             <div className="img-wrap">
               <img
-                src={video.images?.thumbnail}
+                // src={video.images?.thumbnail}
+                src={fixVideoThumbnail(video)}
                 // src={video.images?.thumbnail || img}
                 alt="thumbnail"
                 onError={(e) => (e.currentTarget.src = img)}
+                loading="lazy"
               />
               <div className="wrap">
                 <span className="play">
@@ -109,7 +112,7 @@ function Card3({ videos = [], loading = false, error = null }) {
                 <img
                   className="profile-img"
                   src={`https://images.hive.blog/u/${
-                    video.author?.username || video.author
+                    video.author?.username || video.author || video.owner
                   }/avatar`}
                   alt=""
                 />
@@ -117,10 +120,10 @@ function Card3({ videos = [], loading = false, error = null }) {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    handleProfileNavigation(video.author?.username || video.author);
+                    handleProfileNavigation(video.author?.username || video.author || video.owner);
                   }}
                 >
-                  {video.author?.username || video.author}
+                  {video.author?.username || video.author || video.owner}
                 </h2>
               </div>
             </div>
@@ -134,7 +137,7 @@ function Card3({ videos = [], loading = false, error = null }) {
                     onClick={(e) => {
                       e.preventDefault();
                       toggleTooltip(
-                        video.author?.username || video.author,
+                        video.author?.username || video.author || video.owner,
                         video.permlink,
                         index
                       );
@@ -142,15 +145,17 @@ function Card3({ videos = [], loading = false, error = null }) {
                   />
                   <span>
                     {/* ⚡ Lazy payout component */}
-                    <LazyPayout author={video.author?.username || video.author} permlink={video.permlink} setVotersNum={setVotersNum} setHasVoted1={(isVoted) =>
-      setVoteStatus((prev) => ({ ...prev, [postKey]: isVoted }))
-    } />
+                    <LazyPayout author={video.author?.username || video.author || video.owner} permlink={video.permlink}  setHasVoted1={(isVoted) =>
+                      setVoteStatus((prev) => ({ ...prev, [postKey]: isVoted }))
+                    } setVotersNum={(count) =>
+                      setVotersNum((prev) => ({ ...prev, [postKey]: count }))
+                    } />
                   </span>
                 </div>
 
                 <div className="wrap flex-div">
                   <FaHeart className="icon-heart" />
-                  <span>{votersNum }</span>
+                  <span>{votersNum[postKey] ?? "…"}</span>
                 </div>
               </div>
               <p>{dayjs(video.created_at || video.created).fromNow()}</p>

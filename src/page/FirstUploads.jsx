@@ -9,8 +9,10 @@ import Card3 from '../components/Cards/Card3';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 const fetchVideos = async ({ pageParam = 1 }) => {
+  const LIMIT = 300;
   const res = await axios.get(
     `https://3speak.tv/apiv2/feeds/firstUploads?page=${pageParam}`
+    // `https://3speak.tv/apiv2/feeds/firstUploads?limit=${LIMIT}`
   );
   return res.data;
 };
@@ -24,30 +26,32 @@ const FirstUploads = () => {
     isLoading,
     isError,     
   } = useInfiniteQuery({
-    queryKey: ["videos"],
+    queryKey: ["firstupload"],
     queryFn: fetchVideos,
     getNextPageParam: (lastPage, allPages) => {
-      // If last page has data, increment page
-      if (lastPage.length > 0) return allPages.length + 1;
-      return undefined; // stop fetching
+      // If the last page has items, calculate next skip value
+    if (lastPage.length > 0) {
+      return allPages.flat().length; // next skip = total items loaded so far
+    }
+    return undefined; // stop if no more data
     },
   });
 
-  useEffect(() => {
-      const handleScroll = () => {
-        if (
-          window.innerHeight + window.scrollY >=
-            document.body.offsetHeight - 200 &&
-          !isFetchingNextPage &&
-          hasNextPage
-        ) {
-          fetchNextPage();
-        }
-      };
+  // useEffect(() => {
+  //     const handleScroll = () => {
+  //       if (
+  //         window.innerHeight + window.scrollY >=
+  //           document.body.offsetHeight - 200 &&
+  //         !isFetchingNextPage &&
+  //         hasNextPage
+  //       ) {
+  //         fetchNextPage();
+  //       }
+  //     };
   
-      window.addEventListener("scroll", handleScroll);
-      return () => window.removeEventListener("scroll", handleScroll);
-    }, [isFetchingNextPage, hasNextPage, fetchNextPage]);
+  //     window.addEventListener("scroll", handleScroll);
+  //     return () => window.removeEventListener("scroll", handleScroll);
+  //   }, [isFetchingNextPage, hasNextPage, fetchNextPage]);
   
     // Flatten all pages into a single array
     const videos = data?.pages.flat() || [];

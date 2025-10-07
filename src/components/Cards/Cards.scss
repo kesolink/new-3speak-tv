@@ -6,6 +6,9 @@
   grid-column-gap: 16px;
   grid-row-gap: 30px;
   margin-top: 15px;
+  @include respond(phone) {
+      grid-row-gap: 10px;
+   }
 
   .card {
     background-color: #fff;
@@ -14,6 +17,9 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    @include respond(phone) {
+      border-radius: 8px;
+   }
     
     
 

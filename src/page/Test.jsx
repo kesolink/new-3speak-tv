@@ -4,32 +4,56 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import Card3 from "../components/Cards/Card3";
 import CardSkeleton from "../components/Cards/CardSkeleton";
 
-const fetchVideos = async ({ pageParam = 1 }) => {
-  const res = await axios.get(
-    `https://3speak.tv/apiv2/feeds/@kesolink?page=${pageParam}`
-  );
-  return res.data;
+// const fetchVideos = async ({ pageParam = 1 }) => {
+//   const res = await axios.get(
+//     // `https://3speak.tv/apiv2/feeds/@kesolink?page=${pageParam}`
+//     // `https://3speak.tv/apiv2/feeds/community/hive-140169/new?page=${pageParam}`
+//     `https://3speak.tv/apiv2/feeds/trending/more?skip=${pageParam}`
+//   );
+//   return res.data;
+// };
+
+const fetchVideos = async ({ pageParam = 0 }) => {
+  let user = `eddiespino`
+  let url;
+
+  // On first load, use /feeds/trending
+  if (pageParam === 0) {
+    url = `https://3speak.tv/apiv2/feeds/@${user}?page=${pageParam}`;
+  } 
+  // On later loads, use /feeds/trending/more with skip
+  else {
+    url = `https://3speak.tv/apiv2/feeds/@${user}/more?page=${pageParam}`;
+  }
+
+  const res = await axios.get(url);
+  // Notice: trending returns an array, while /more returns { trends: [...] }
+  return res.data.trends || res.data;
 };
 
+
 function Test() {
-  const {
+const {
     data,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
     isLoading,
-    isError,     
+    isError,
   } = useInfiniteQuery({
-    queryKey: ["videos"],
+    queryKey: ["trendingVideos"],
     queryFn: fetchVideos,
     getNextPageParam: (lastPage, allPages) => {
-      // If last page has data, increment page
-      if (lastPage.length > 0) return allPages.length + 1;
-      return undefined; // stop fetching
+      // If lastPage returned data, calculate new skip
+      const currentTotal = allPages.flat().length;
+      if (lastPage && lastPage.length > 0) return currentTotal;
+      return undefined; // Stop when no more data
     },
   });
 
-  // Infinite scroll effect
+  console.log(data)
+
+ // Infinite scroll effect
   useEffect(() => {
     const handleScroll = () => {
       if (
@@ -46,7 +70,7 @@ function Test() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isFetchingNextPage, hasNextPage, fetchNextPage]);
 
-  // Flatten all pages into a single array
+  // Flatten all pages into one list
   const videos = data?.pages.flat() || [];
 
   return (

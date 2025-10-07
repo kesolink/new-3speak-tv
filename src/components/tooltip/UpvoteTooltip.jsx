@@ -142,7 +142,7 @@ const UpvoteTooltip = ({ author, permlink, showTooltip, setShowTooltip,voteValue
             {isLoading ? (
               <div className='wrap-circle'><TailChase className="loader-circle" size="15" speed="1.5" color="red" /></div>
             ) : (
-              <IoChevronUpCircleOutline size={30} onClick={handleVote} />
+              <IoChevronUpCircleOutline size={30}   onClick={handleVote} className='circle-vote-btn' />
             )}
 
             {/* {isLoading ? (

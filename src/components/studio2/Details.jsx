@@ -105,6 +105,11 @@ function Details() {
 
 
     const process = () => {
+      if(!uploadStatus){
+        toast.error("Video is still uploading");
+        return;
+      }
+
         if (!title || !description || !tagsInputValue || !community || !thumbnailFile) {
             toast.error("Please fill in all fields, Title, Description and tag!");
             return;

@@ -1,34 +1,28 @@
-
-import "./FirstUploads.scss"
-import Cards from '../components/Cards/Cards'
-import { useQuery } from "@apollo/client";
-import { GET_TRENDING_FEED, TRENDING_FEED } from "../graphql/queries";
+import "./FirstUploads.scss";
 import CardSkeleton from "../components/Cards/CardSkeleton";
 import { useEffect } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Card3 from "../components/Cards/Card3";
 
-const fetchVideos = async ({ pageParam = 1 }) => {
-  const res = await axios.get(
-    `https://3speak.tv/apiv2/feeds/trending?page=${pageParam}`
-  );
-  return res.data;
+const LIMIT = 500;
+
+const fetchVideos = async ({ pageParam = 0 }) => {
+  let url;
+
+  // On first load, use /feeds/trending
+  if (pageParam === 0) {
+    url = `https://3speak.tv/apiv2/feeds/trending?limit=${LIMIT}`;
+  } 
+  // On later loads, use /feeds/trending/more with skip
+  else {
+    url = `https://3speak.tv/apiv2/feeds/trending/more?skip=${pageParam}`;
+  }
+
+  const res = await axios.get(url);
+  // Notice: trending returns an array, while /more returns { trends: [...] }
+  return res.data.trends || res.data;
 };
-
-
-// const fetchVideos = async ({ pageParam = 0 }) => {
-//   if (pageParam === 0) {
-//     // First request
-//     const res = await axios.get("https://3speak.tv/apiv2/feeds/trending?limit=20");
-//     return res.data;
-//   } else {
-//     // More requests, use skip
-//     const res = await axios.get(`https://3speak.tv/apiv2/feeds/trending/more?skip=${pageParam}`);
-//     return res.data.trends; // backend wraps in { trends: [...] }
-//   }
-// };
-
 
 const Trend = () => {
   const {
@@ -37,52 +31,58 @@ const Trend = () => {
     hasNextPage,
     isFetchingNextPage,
     isLoading,
-    isError,     
+    isError,
   } = useInfiniteQuery({
-    queryKey: ["videos"],
+    queryKey: ["trending"],
     queryFn: fetchVideos,
     getNextPageParam: (lastPage, allPages) => {
-      // If last page has data, increment page
-      if (lastPage.length > 0) return allPages.length + 1;
-      return undefined; // stop fetching
+      // If lastPage returned data, calculate new skip
+      const currentTotal = allPages.flat().length;
+      if (lastPage && lastPage.length > 0) return currentTotal;
+      return undefined; // Stop when no more data
     },
   });
 
+  console.log(data)
 
   // Infinite scroll effect
-    useEffect(() => {
-      const handleScroll = () => {
-        if (
-          window.innerHeight + window.scrollY >=
-            document.body.offsetHeight - 200 &&
-          !isFetchingNextPage &&
-          hasNextPage
-        ) {
-          fetchNextPage();
-        }
-      };
-  
-      window.addEventListener("scroll", handleScroll);
-      return () => window.removeEventListener("scroll", handleScroll);
-    }, [isFetchingNextPage, hasNextPage, fetchNextPage]);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + window.scrollY >=
+          document.body.offsetHeight - 200 &&
+        !isFetchingNextPage &&
+        hasNextPage
+      ) {
+        fetchNextPage();
+      }
+    };
 
-  // Flatten all pages into a single array
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isFetchingNextPage, hasNextPage, fetchNextPage]);
+
+  // Flatten all pages into one list
   const videos = data?.pages.flat() || [];
+  console.log(videos)
 
   return (
-    <div className='firstupload-container'>
-        <div className='headers'>TRENDING</div>
-        {isLoading ? <CardSkeleton /> :  <Card3 videos={videos} loading={isFetchingNextPage} />}
-      {isError && <p>Error fetching videos</p>}
+    <div className="firstupload-container">
+      <div className="headers">TRENDING</div>
 
-      
+      {isLoading ? (
+        <CardSkeleton />
+      ) : (
+        <Card3 videos={videos} loading={isFetchingNextPage} />
+      )}
+
+      {isError && <p>Error fetching videos</p>}
 
       {isFetchingNextPage && (
         <p style={{ textAlign: "center" }}>Loading more...</p>
       )}
-
     </div>
-  )
-}
+  );
+};
 
-export default Trend
+export default Trend;
