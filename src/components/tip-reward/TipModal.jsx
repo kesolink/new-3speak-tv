@@ -6,9 +6,6 @@ import { useAppStore } from '../../lib/store';
 import {  toast } from 'sonner'
 import { LineSpinner } from 'ldrs/react'
 import 'ldrs/react/LineSpinner.css'
-import { Aioha } from "@aioha/aioha"; // 👈 import Aioha
-
-const aioha = new Aioha(); // 👈 create aioha instance
 
 
 
@@ -50,7 +47,7 @@ const TipModal = ({ recipient, isOpen, onClose, onSendTip }) => {
   }
 
   
-  // console.log(balances)
+  console.log(balances)
 
 //   const handleSendTip = () => {
 //     // onSendTip(amount, currency, memo);
@@ -65,115 +62,54 @@ const TipModal = ({ recipient, isOpen, onClose, onSendTip }) => {
     onClose();
   };
 
-  // const handleSubmitTransfer = async () => {
-  //   if (!amount || !recipient || !currency) {
-  //     toast.error("All fields are required");
-  //     return;
-  //   }
-  
-  //   if (amount > selectedBalance) {
-  //     toast.error("Insufficient balance");
-  //     return;
-  //   }
-  
-  //   const valid = await isAccountValid(recipient);
-  //   if (!valid) {
-  //     toast.error("Invalid username");
-  //     return;
-  //   }
-  
-  //   try {
-  //     const transferOp = [
-  //       'transfer',
-  //       {
-  //         from: activetUser,
-  //         to: recipient,
-  //         amount: `${parseFloat(amount).toFixed(3)} ${currency}`,
-  //         memo: memo || ''
-  //       }
-  //     ];
-  
-  //     window.hive_keychain.requestBroadcast(
-  //       activetUser,
-  //       [transferOp],
-  //       'Active',
-  //       async (response) => {
-  //         if (response.success) {
-  //           setStep(2);
-  //         } else {
-  //           toast.error(`Transfer failed: ${response.message}`);
-  //         }
-  //       }
-  //     );
-  
-  //   } catch (error) {
-  //     toast.error("Error processing transfer");
-  //     console.error(error);
-  //   }
-  // };
-  
-
   const handleSubmitTransfer = async () => {
-  if (!amount || !recipient || !currency) {
-    toast.error("All fields are required");
-    return;
-  }
+    if (!amount || !recipient || !currency) {
+      toast.error("All fields are required");
+      return;
+    }
+  
+    if (amount > selectedBalance) {
+      toast.error("Insufficient balance");
+      return;
+    }
+  
+    const valid = await isAccountValid(recipient);
+    if (!valid) {
+      toast.error("Invalid username");
+      return;
+    }
+  
+    try {
+      const transferOp = [
+        'transfer',
+        {
+          from: activetUser,
+          to: recipient,
+          amount: `${parseFloat(amount).toFixed(3)} ${currency}`,
+          memo: memo || ''
+        }
+      ];
+  
+      window.hive_keychain.requestBroadcast(
+        activetUser,
+        [transferOp],
+        'Active',
+        async (response) => {
+          if (response.success) {
+            setStep(2);
+          } else {
+            toast.error(`Transfer failed: ${response.message}`);
+          }
+        }
+      );
+  
+    } catch (error) {
+      toast.error("Error processing transfer");
+      console.error(error);
+    }
+  };
+  
 
-  if (amount > selectedBalance) {
-    toast.error("Insufficient balance");
-    return;
-  }
-
-  const valid = await isAccountValid(recipient);
-  if (!valid) {
-    toast.error("Invalid username");
-    return;
-  }
-
-  const transferOp = [
-    "transfer",
-    {
-      from: activetUser,
-      to: recipient,
-      amount: `${parseFloat(amount).toFixed(3)} ${currency}`,
-      memo: memo || "",
-    },
-  ];
-
-  try {
-    // 🔹 1. If Keychain is available
-    // if (window.hive_keychain) {
-    //   window.hive_keychain.requestBroadcast(
-    //     activetUser,
-    //     [transferOp],
-    //     "Active",
-    //     async (response) => {
-    //       if (response.success) {
-    //         setStep(2);
-    //       } else {
-    //         toast.error(`Transfer failed: ${response.message}`);
-    //       }
-    //     }
-    //   );
-    // } else {
-      // 🔹 2. If no Keychain → fallback to Aioha
-      const rep = await aioha.login(activetUser); // ensure user is logged in with Aioha
-      // console.log(rep)
-
-      // const res = await aioha.broadcast([transferOp]);
-      const res = await aioha.transfer('recipient', amount, currency, 'Transferred using Aioha with memo')
-      console.log(res)
-      if (res?.success || res?.id) {
-        setStep(2);
-      } else {
-        toast.error("Transfer failed using Aioha");
-      }
-    // }
-  } catch (error) {
-    toast.error("Error processing transfer");
-    console.error(error);
-  }
-};
 
   return (
     <div className={`tip-modal ${step === 2 ? "add" : ""}`}>
