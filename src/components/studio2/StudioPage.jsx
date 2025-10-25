@@ -1,4 +1,4 @@
-import React, { useEffect} from "react";
+import React, { useEffect, useState} from "react";
 import "./StudioPage.scss";
 import { StepProgress } from "./StepProgress";
 import VideoUploadStep1 from "./VideoUploadStep1";
@@ -9,6 +9,8 @@ import 'ldrs/react/LineSpinner.css'
 import { useUpload } from "../../context/UploadContext";
 
 function StudioPage() {
+
+  const [banned, setBanned]= useState(null)
 
   const {
     user,
@@ -36,6 +38,7 @@ function StudioPage() {
 
   useEffect(()=>{
     setStep(1)
+    getBanInfo()
   }, [])
 
 
@@ -79,6 +82,13 @@ function StudioPage() {
   useEffect(()=>{
     checkPostAuth(user);
   },[])
+
+
+  const getBanInfo = async ()=>{
+    const res = await axios.get(`http://144.48.107.2:5000/check/${username}`)
+    console.log(res.data)
+    setBanned(res.data.canUpload)
+  }
 
     const  checkPostAuth= async(username)=>{
         if(!authenticated){
@@ -173,6 +183,7 @@ function StudioPage() {
        setUploadVideoProgress={setUploadVideoProgress}
        uploadVideoProgress={uploadVideoProgress}
        uploadURLRef={uploadURLRef}
+       banned={banned}
        />
       {/* {step === 2 && <VideoUploadStep2 
       videoFile={videoFile}

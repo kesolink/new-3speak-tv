@@ -8,12 +8,13 @@ import Arrow from "./../../../public/images/arrow.png"
 import { useUpload } from '../../context/UploadContext';
 import { useNavigate } from 'react-router-dom';
 function VideoUploadStep1() {
- const  { setVideoDuration, setUploadURL, videoFile,  setVideoFile,setPrevVideoUrl, setPrevVideoFile, setGeneratedThumbnail,setUploadVideoProgress, uploadURLRef } = useUpload()
+ const  { setVideoDuration, setUploadURL, videoFile,  setVideoFile,setPrevVideoUrl, setPrevVideoFile, setGeneratedThumbnail,setUploadVideoProgress, uploadURLRef, banned } = useUpload()
   const tusEndPoint = "https://uploads.3speak.tv/files/";
   const navigate = useNavigate()
 
 
   const videoInputRef = useRef(null);
+  const isBanned = banned && banned.canUpload === false;
 
   const calculateVideoDuration = (file) => {
     return new Promise((resolve) => {
@@ -72,9 +73,14 @@ function VideoUploadStep1() {
 
     upload.start();
   };
-
+    // console.log(banned.canUpload)
   const uploadVideo = ()=>{
-    console.log("Testing")
+
+    if (!isBanned) {
+      toast.error("user have been banned");
+      return;
+    }
+    
     if(!videoFile){
       toast.error("Please select a video file first.")
       return;
@@ -82,6 +88,9 @@ function VideoUploadStep1() {
     navigate("/studio/thumbnail")
     // setStep(2)
   }
+
+
+  console.log(banned)
   return (
     <div><div className="upload-step">
       {/* <div className="header">

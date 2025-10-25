@@ -129,7 +129,7 @@ const calculateVoteValue = async (account, percent) => {
 
       const speakWatchData = async ()=>{
         const res = await axios.get(`https://3speak.tv/apiv2/@${author}/${permlink}`)
-         console.log(res)
+         console.log("3speak--data----", res.data)
          setSpeakData(res.data)
         //  setVideoUrlSelected(res.data.playUrl)
          setView(res.data.views)
@@ -224,6 +224,7 @@ const calculateVoteValue = async (account, percent) => {
     loading,
   } = useQuery(GET_VIDEO, { variables: { author, permlink }, ssr: true });
   const spkvideo = getVideo?.socialPost.spkvideo;
+  console.log("hive ---- data" , spkvideo)
   const [videoUrlSelected, setVideoUrlSelected] = useState(null);
 
   const getUserProfile = useQuery(GET_PROFILE, {
@@ -234,15 +235,22 @@ const calculateVoteValue = async (account, percent) => {
   const tags = videoDetails?.tags?.slice(0, 7);
   const comunity_name = videoDetails?.community?.title;
 
-  useEffect(() => {
-    if (spkvideo?.play_url) {
-      const url = spkvideo.play_url;
-      const result = url.includes("ipfs://")
-        ? url.split("ipfs://")[1] // Extract the IPFS hash
-        : url;
-      setVideoUrlSelected(`https://ipfs-3speak.b-cdn.net/ipfs/${result}`);
+useEffect(() => {
+  if (spkvideo?.play_url) {
+    const url = spkvideo.play_url;
+
+    // If the URL starts with "ipfs://", convert it to a CDN link
+    if (url.startsWith("ipfs://")) {
+      const ipfsHash = url.replace("ipfs://", "");
+      setVideoUrlSelected(`https://ipfs-3speak.b-cdn.net/ipfs/${ipfsHash}`);
+    } 
+    // Otherwise, use the link directly (e.g., m3u8 link)
+    else {
+      setVideoUrlSelected(url);
     }
-  }, [spkvideo]);
+  }
+}, [spkvideo]);
+
 
 
   if (loading) {

@@ -101,9 +101,9 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount }) {
           <Link to="/profile" className="wrap" onClick={onclose}>
             <IoMdPerson className="icon" /> <span>My Channel</span>
           </Link>
-          <Link className="wrap" onClick={onclose}>
+          {/* <Link className="wrap" onClick={onclose}>
             <TiThList className="icon" /> <span>Playlist</span>
-          </Link>
+          </Link> */}
           <Link to="/studio" className="wrap" onClick={onclose}>
 
 
@@ -124,9 +124,9 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount }) {
 
             </div>)}
           </div>
-          <Link className="wrap">
+          {/* <Link className="wrap">
             <FaLanguage className="icon" /> <span>Language Settings</span>
-          </Link>
+          </Link> */}
           <Link to={"/login"} onClick={() => { LogOut(user); onclose() }} className="wrap">
             <IoPower className="icon" /> <span>Logout</span>
           </Link>
