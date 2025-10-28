@@ -35,6 +35,7 @@
     "hive-content-renderer": "^1.0.3",
     "html-to-text": "^9.0.5",
     "js-md5": "^0.8.3",
+    "jwt-decode": "^4.0.0",
     "keychain-sdk": "^0.8.5",
     "ldrs": "^1.1.6",
     "lodash.debounce": "^4.0.8",

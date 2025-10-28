@@ -35,27 +35,63 @@ import AddAccount_modal from "./components/modal/AddAccount_modal";
 import TestingLogin3 from "./page/Login/TestingLogin3";
 // import TestingLogin from "./page/Login/TestingLogin";
 import AboutPage from "./components/LandingPage/AboutPage";
-import { Toaster } from 'sonner'
+import { toast, Toaster } from 'sonner'
 import Thumbnail from "./components/studio2/Thumbnail";
 import Details from "./components/studio2/Details";
 import Preview from "./components/studio2/Preview";
 import Test from "./page/Test";
+import Email from "./page/Login/Email"
+import AuthCallback from "./page/Login/AuthCallback";
+import {AUTH_JWT_SECRET} from "../src/utils/config";
+
+
+import { jwtDecode } from "jwt-decode";
 
 function App() {
-  const { initializeAuth, authenticated } = useAppStore();
+  const { initializeAuth, authenticated, LogOut } = useAppStore();
   const [sidebar, setSideBar] = useState(true);
   const [profileNavVisible, setProfileNavVisible] = useState(false);
 
   const [globalCloseRender, setGlobalCloseRender] = useState(false)
   const [toggle, setToggle] = useState(false);
   const [reloadSwitch, setRelaodSwitch] = useState(false)
+  
 
 
 
   useEffect(() => {
     initializeAuth();
-    // authenticated()
+    tokenVaildation()
+
   }, []);
+
+
+
+
+
+  const tokenVaildation = ()=>{
+    const token = window.localStorage.getItem("access_token")
+    if (token && authenticated){
+      try {
+    const decoded = jwtDecode(token);
+    console.log(decoded)
+
+    // exp is in seconds, Date.now() is in ms
+    const isExpired = decoded.exp * 1000 < Date.now();
+    if (isExpired) {
+          // console.warn("Token expired — logging out user");
+          toast.error("Secssion expired")
+          LogOut(decoded.user_id); // this will already remove the token
+          return false;
+        }
+    return !isExpired;
+  } catch (err) {
+    console.error("Invalid token:", err);
+    return false;
+  }
+    }
+
+  }
 
   
 
@@ -73,12 +109,13 @@ function App() {
 
   return (
     <div onClick={()=> {setGlobalCloseRender(true)}}>
+      <Toaster richColors position="top-right" />
       <Nav setSideBar={setSideBar} toggleProfileNav={toggleProfileNav}  globalClose={globalCloseRender} setGlobalClose={setGlobalCloseRender} />
       <div>
         <Sidebar sidebar={sidebar} />
         <div className={`container ${sidebar ? "" : "large-container"}`}>
           <ScrollToTop />
-          <Toaster richColors position="top-right" />
+          {/* <Toaster richColors position="top-right" /> */}
           <Routes>
             <Route path="/" element={<Feed />} />
             <Route path="/watch" element={<Watch />} />
@@ -87,7 +124,8 @@ function App() {
             <Route path="/trend" element={<Trend />} />
             <Route path="/new" element={<NewVideos />} />
             <Route path="/login" element={<KeyChainLogin />} />
-            {/* <Route path="/keychain" element={<KeyChainLogin />} /> */}
+            {/* <Route path="/auth/callback" element={<AuthCallback />} />
+            <Route path="/email" element={<Email/>} /> */}
             <Route path="/newlogin" element={<LoginNew />} />
             <Route path="/studio" element={<StudioPage />} />
             <Route path="/studio/thumbnail" element={<Thumbnail />} />

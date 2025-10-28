@@ -128,7 +128,8 @@ function VideoUploadStep1() {
 
             <input
               type="file"
-              accept="video/*"
+              // accept="video/*"
+              accept="video/mp4, video/x-m4v, video/*, .mkv, .flv, .mov, .avi, .wmv"
             ref={videoInputRef}
               onChange={handleFileUpload}
               className="input"

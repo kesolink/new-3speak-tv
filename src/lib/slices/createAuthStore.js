@@ -82,15 +82,16 @@ export const createAuthUserSlice = (set) => ({
         listAccounts: [],
         isProcessing: null,
       });
-
-
-      console.log("User has been logged out successfully.");
+    //  toast.error("logged out successfully")
     }
+
+
   },
 
 
   //The clearAccount delete the user acces-token from the local storage.
   clearAccount: (user) => {
+
      aioha.removeOtherLogin(user);
     const accounts = JSON.parse(localStorage.getItem("accountsList") || "[]");
     const updatedAccounts = accounts.filter(acc => acc.username !== user);

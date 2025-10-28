@@ -61,6 +61,7 @@ const {
   hasNextPage,
   isFetchingNextPage,
   isLoading,
+  refetch,
 } = useInfiniteQuery({
   queryKey: ["ProfilePage", user],
   queryFn: fetchVideos,
