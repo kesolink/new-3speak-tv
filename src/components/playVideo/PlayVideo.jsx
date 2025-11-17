@@ -354,32 +354,55 @@ const handleProfileNavigate = (user) => {
     setShowTooltip((prev)=> !prev)
   };
 
-  console.log(view)
+  console.log(videoUrlSelected)
 
   return (
     <>
     <div className="play-video">
       <div className="top-container">
 {videoUrlSelected ? (
-    <JWPlayer
-      // library={`https://cdn.jwplayer.com/libraries/${import.meta.env.VITE_JWPLAYER_LICENSE_ID}.js `} // Updated library
-      // licenseKey={import.meta.env.VITE_JWPLAYER_LICENSE_KEY} // Verify key validity
-      playlist={[
-        {
-          file: videoUrlSelected,
-          image: spkvideo?.thumbnail_url,
-        },
-      ]}
-      playbackRateControls={true}
-      autostart={false}
-      aspectRatio="16:9"
-      customProps={{
-        hlsjsConfig: {
-          debug: true, // Enable HLS.js debugging
-          capLevelToPlayerSize: true, // Auto quality adjustment
-        },
-      }}
-    />
+    // <JWPlayer
+    //   // library={`https://cdn.jwplayer.com/libraries/${import.meta.env.VITE_JWPLAYER_LICENSE_ID}.js `} // Updated library
+    //   // licenseKey={import.meta.env.VITE_JWPLAYER_LICENSE_KEY} // Verify key validity
+    //   playlist={[
+    //     {
+    //       file: videoUrlSelected,
+    //       image: spkvideo?.thumbnail_url,
+    //     },
+    //   ]}
+    //   playbackRateControls={true}
+    //   autostart={false}
+    //   aspectRatio="16:9"
+    //   customProps={{
+    //     hlsjsConfig: {
+    //       debug: true, // Enable HLS.js debugging
+    //       capLevelToPlayerSize: true, // Auto quality adjustment
+    //     },
+    //   }}
+    // />
+    <div
+  style={{
+    position: "relative",
+    paddingBottom: "56.25%",
+    height: 0,
+  }}
+>
+  <iframe
+    src={`https://play.3speak.tv/watch?v=${author}/${permlink}&mode=iframe`}
+    style={{
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      border: "0",
+    }}
+    frameBorder="0"
+    allowFullScreen
+  ></iframe>
+</div>
+
+
   ) : (
     <div className="video-loader">
       <ImSpinner9 className="spinner" />

@@ -2,9 +2,9 @@ import { createContext, useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppStore } from "../lib/store";
 
-const UploadContext = createContext();
+const LegacyUploadContext = createContext();
 
-export function UploadProvider({ children }) {
+export function LegacyUploadProvider({ children }) {
 
     const initialState = {
     title: "",
@@ -115,7 +115,7 @@ export function UploadProvider({ children }) {
   };
  
 
-  return <UploadContext.Provider value={{
+  return <LegacyUploadContext.Provider value={{
         // store
         updateProcessing,
         user,
@@ -167,8 +167,8 @@ export function UploadProvider({ children }) {
        
       }}>
          {children}
-       </UploadContext.Provider>;
+       </LegacyUploadContext.Provider>;
 }
 
-// export default UploadContext;
-export const useUpload = () => useContext(UploadContext);
+// export default LegacyUploadContext;
+export const useLegacyUpload = () => useContext(LegacyUploadContext);

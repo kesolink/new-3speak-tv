@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useUpload } from '../../context/UploadContext';
+import { useMobileUpload } from '../../context/MobileUploadContext';
 import checker from "../../../public/images/checker.png"
 import DOMPurify from 'dompurify';
 import {  toast } from 'sonner'
@@ -46,7 +46,7 @@ function Details() {
         setError,
         studioEndPoint,
         selectedThumbnail,
-      } = useUpload();
+      } = useMobileUpload();
 
       const [loading, setLoading] = useState(false)
 

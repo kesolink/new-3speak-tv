@@ -18,8 +18,8 @@ import LoginNew from "./page/Login/LoginNew";
 import { useAppStore } from "./lib/store";
 import { useEffect } from "react";
 import ProfileNav from "./components/nav/ProfileNav";
-import StudioPage from "./components/studio2/StudioPage";
-import StudioPage2 from "./components/studio2/StudioPage";
+import StudioPage from "./components/legacy-studio/StudioPage";
+// import StudioPage2 from "./components/legacy-studio/StudioPage";
 import CommunitiesRender from "./components/Communities/CommunitiesRender";
 import CommunityPage from "./components/Communities/CommunityPage";
 import TagFeed from "./page/TagFeed";
@@ -36,9 +36,9 @@ import TestingLogin3 from "./page/Login/TestingLogin3";
 // import TestingLogin from "./page/Login/TestingLogin";
 import AboutPage from "./components/LandingPage/AboutPage";
 import { toast, Toaster } from 'sonner'
-import Thumbnail from "./components/studio2/Thumbnail";
-import Details from "./components/studio2/Details";
-import Preview from "./components/studio2/Preview";
+import Thumbnail from "./components/legacy-studio/Thumbnail";
+import Details from "./components/legacy-studio/Details";
+import Preview from "./components/legacy-studio/Preview";
 import Test from "./page/Test";
 // import Email from "./page/Login/Email"
 // import AuthCallback from "./page/Login/AuthCallback";
@@ -133,7 +133,7 @@ function App() {
             <Route path="/studio/thumbnail" element={<Thumbnail />} />
             <Route path="/studio/details" element={<Details />} />
             <Route path="/studio/preview" element={<Preview />} />
-            <Route path="/studio2" element={<StudioPage2 />} />
+            {/* <Route path="/studio2" element={<StudioPage2 />} /> */}
             <Route path="/draft" element={<DraftStudio />} />
             <Route path="/editvideo/:d" element={<EditVideo />} />
             <Route path="/communities" element={<CommunitiesRender />} />

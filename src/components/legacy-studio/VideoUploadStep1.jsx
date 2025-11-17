@@ -1,79 +1,52 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { Upload, Video } from "lucide-react";
 import "./VideoUploadStep1.scss"
 import {generateVideoThumbnails} from "@rajesh896/video-thumbnails-generator";
-import * as tus from "tus-js-client";
 import {  toast } from 'sonner'
 import Arrow from "./../../../public/images/arrow.png"
-import { useUpload } from '../../context/UploadContext';
+import { useLegacyUpload  } from '../../context/LegacyUploadContext';
 import { useNavigate } from 'react-router-dom';
+import { TailChase } from 'ldrs/react'
+import 'ldrs/react/TailChase.css'
 function VideoUploadStep1() {
- const  { setVideoDuration, setUploadURL, videoFile,  setVideoFile,setPrevVideoUrl, setPrevVideoFile, setGeneratedThumbnail,setUploadVideoProgress, uploadURLRef, banned } = useUpload()
-  const tusEndPoint = "https://uploads.3speak.tv/files/";
+ const  { setVideoDuration,  videoFile,  setVideoFile, setPrevVideoFile, setGeneratedThumbnail, banned } = useLegacyUpload()
+const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
 
   const videoInputRef = useRef(null);
   const isBanned = banned && banned.canUpload === false;
 
-  const calculateVideoDuration = (file) => {
-    return new Promise((resolve) => {
-      const video = document.createElement("video");
-      video.preload = "metadata";
-
-      video.onloadedmetadata = () => {
-        window.URL.revokeObjectURL(video.src); // Clean up
-        resolve(video.duration); // Duration in seconds
-      };
-
-      video.src = URL.createObjectURL(file);
-    });
-  };
 
 
-    const handleFileUpload = async (event) => {
-    const file = event.target.files[0];
+    const handleVideoSelect = async (e) => {
+    const file = e.target.files[0];
     if (!file) return;
 
-    setVideoFile(file);
-    setPrevVideoFile(file)
+    if (!file.type.startsWith("video/")) {
+      toast.error("Please select a valid video file");
+      return;
+    }
+   setLoading(true)
 
-    const fileUrl = URL.createObjectURL(file);
-    setPrevVideoUrl(fileUrl)
-    console.log("file", file)
     const thumbs = await generateVideoThumbnails(file, 2, "url");
     // console.log("Generated Thumbnails:", thumbs);
     setGeneratedThumbnail(thumbs)
 
-    const duration = await calculateVideoDuration(file);
-    setVideoDuration(duration);
-
-    const upload = new tus.Upload(file, {
-      endpoint: tusEndPoint,
-      retryDelays: [0, 3000, 5000, 10000, 20000],
-      metadata: {
-        filename: file.name,
-        filetype: file.type,
-      },
-      onError: (error) => {
-        console.error("Upload failed:", error);
-      },
-      onProgress: (bytesUploaded, bytesTotal) => {
-        const percentage = Number(((bytesUploaded / bytesTotal) * 100).toFixed(2));
-        setUploadVideoProgress(percentage)
-      },
-      onSuccess: () => {
-        const finalURL = upload.url.replace(tusEndPoint, "");
-        uploadURLRef.current = finalURL
-        setUploadURL(finalURL);
-        
-        console.log("Upload successful! URL:", finalURL);
-      },
-    });
-
-    upload.start();
+    const videoElement = document.createElement("video");
+    videoElement.preload = "metadata";
+    videoElement.onloadedmetadata = () => {
+      window.URL.revokeObjectURL(videoElement.src);
+      setVideoDuration(videoElement.duration);
+      setLoading(false)
+      setVideoFile(file);
+      setPrevVideoFile(file); // for preview
+      // setStep(2);
+      // navigate("/studio/thumbnail");
+    };
+    videoElement.src = URL.createObjectURL(file);
   };
-    // console.log(banned.canUpload)
+
   const uploadVideo = ()=>{
 
     if (isBanned) {
@@ -131,24 +104,28 @@ function VideoUploadStep1() {
               // accept="video/*"
               accept="video/mp4, video/x-m4v, video/*, .mkv, .flv, .mov, .avi, .wmv"
             ref={videoInputRef}
-              onChange={handleFileUpload}
+              onChange={handleVideoSelect}
               className="input"
               id="video-upload"
             />
-            {!videoFile ? <label
-              htmlFor="video-upload"
-              className="button"
-            //   onClick={handleVideoDivClick}
-            >
-              Browse Files
-            </label>: 
-            <label
-              onClick={uploadVideo}
-              className="button"
-            //   onClick={handleVideoDivClick}
-            >
-              Proceed to Thumbnails
-            </label>}
+            {loading ? (
+              <TailChase size="30" speed="1.75" color="red" />
+            ) : !videoFile ? (
+              <label
+                htmlFor="video-upload"
+                className="button"
+              >
+                Browse Files
+              </label>
+            ) : (
+              <label
+                onClick={uploadVideo}
+                className="button"
+              >
+                Proceed to Thumbnails
+              </label>
+            )}
+
 
           </div>
         </div>
