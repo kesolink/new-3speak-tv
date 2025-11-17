@@ -5,14 +5,14 @@ import "./VideoUploadStep2.scss";
 import {  toast } from 'sonner'
 import { TailChase } from 'ldrs/react'
 import 'ldrs/react/TailChase.css'
-import { useUpload } from "../../context/UploadContext";
+import { useMobileUpload } from "../../context/MobileUploadContext";
 import { StepProgress } from "./StepProgress";
 import { Navigate, useNavigate } from "react-router-dom";
 
 // Default values shown
 
 function Thumbnail() {
- const { generatedThumbnail, setThumbnailFile, setStep,  setUploadThumbnailProgress,videoFile, step, selectedThumbnail, setSelectedThumbnail, selectedIndex, setSelectedIndex } = useUpload()
+ const { generatedThumbnail, setThumbnailFile, setStep,  setUploadThumbnailProgress,videoFile, step, selectedThumbnail, setSelectedThumbnail, selectedIndex, setSelectedIndex } = useMobileUpload()
   const tusEndPoint = "https://uploads.3speak.tv/files/";
   // const [selectedThumbnail, setSelectedThumbnail] = useState("");
   const [customfile, setCustomFile] = useState([]);

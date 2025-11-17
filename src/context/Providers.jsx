@@ -1,17 +1,21 @@
 // import { AuthProvider } from "./AuthContext";
 import { useAppStore } from "../lib/store";
-import { UploadProvider } from "./UploadContext";
+import { LegacyUploadProvider } from "./LegacyUploadContext";
+import { MobileUploadProvider } from "./MobileUploadContext";
 // import { ThemeProvider } from "./ThemeContext";
 
 export const AppProviders = ({ children }) => {
     const { user } = useAppStore();
   return (
     // <AuthProvider>
-      <UploadProvider key={user}>
+      <MobileUploadProvider key={user}>
+        <LegacyUploadProvider key={user}>
+        
         {/* <ThemeProvider> */}
           {children}
         {/* </ThemeProvider> */}
-      </UploadProvider>
+        </LegacyUploadProvider>
+      </MobileUploadProvider>
     // </AuthProvider>
   );
 };

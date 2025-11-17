@@ -7,11 +7,11 @@ import { useAppStore } from '../../lib/store';
 import { TailChase } from 'ldrs/react'
 import 'ldrs/react/TailChase.css'
 import VideoPreview from '../studio/VideoPreview';
-import { useUpload } from '../../context/UploadContext';
+import { useMobileUpload } from '../../context/MobileUploadContext';
 import { StepProgress } from './StepProgress';
 import BlogContent from '../playVideo/BlogContent';
 function Preview() {
- const  { step, title, description, tagsPreview, videoId, prevVideoFile, community,declineRewards, rewardPowerup, beneficiaries, tagsInputValue, thumbnailFile, resetUploadState, setJobId } = useUpload()
+ const  { step, title, description, tagsPreview, videoId, prevVideoFile, community,declineRewards, rewardPowerup, beneficiaries, tagsInputValue, thumbnailFile, resetUploadState, setJobId } = useMobileUpload()
   const studioEndPoint = "https://studio.3speak.tv";
   const {updateProcessing, } = useAppStore()
   const [loading, setLoading] = useState(false)

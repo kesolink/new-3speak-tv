@@ -6,7 +6,7 @@ import Auth_modal from "../modal/Auth_modal";
 import axios from "axios";
 import { has3SpeakPostAuth } from "../../utils/hiveUtils";
 import 'ldrs/react/LineSpinner.css'
-import { useUpload } from "../../context/UploadContext";
+import { useLegacyUpload} from "../../context/LegacyUploadContext";
 
 function StudioPage() {
 
@@ -34,7 +34,7 @@ function StudioPage() {
     setUploadStatus,
     setError,
     uploadURLRef,
-  } = useUpload();
+  } = useLegacyUpload();
 
   useEffect(()=>{
     setStep(1)
