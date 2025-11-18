@@ -85,7 +85,7 @@ function StudioPage() {
 
 
   const getBanInfo = async ()=>{
-    const res = await axios.get(`http://144.48.107.2:5000/check/${username}`)
+    const res = await axios.get(`https://check-api.3speak.tv/check/${username}`)
     console.log(res.data)
     setBanned(res.data.canUpload)
   }
