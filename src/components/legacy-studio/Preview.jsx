@@ -75,6 +75,20 @@ function Preview() {
       // -----------------------------------
       // STEP 1 — PREPARE
       // -----------------------------------
+
+      console.log("PAYLOAD SENT:", {
+  owner: localStorage.getItem("user_id"),
+  title,
+  description,
+  tagsPreview,
+  size: videoFile?.size,
+  duration: videoFile?.duration,
+  filename: videoFile?.name,
+  community,
+  declineRewards,
+  beneficiaries
+});
+
       const prepareResp = await axios.post(
         "https://video.3speak.tv/api/upload/prepare",
         {
