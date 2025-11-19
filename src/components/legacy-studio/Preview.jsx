@@ -19,6 +19,7 @@ function Preview() {
     description,
     tagsPreview,
     videoFile,
+    videoDuration,
     prevVideoFile,
     community,
     declineRewards,
@@ -76,17 +77,38 @@ function Preview() {
       // STEP 1 — PREPARE
       // -----------------------------------
 
+        // Force it to be an array
+    let finalBeneficiaries = [];
+    
+    if (Array.isArray(beneficiaries)) {
+      finalBeneficiaries = beneficiaries;
+    } else if (typeof beneficiaries === 'string') {
+      try {
+        finalBeneficiaries = JSON.parse(beneficiaries);
+        console.log("Parsed from string:", finalBeneficiaries);
+      } catch (e) {
+        console.error("Failed to parse beneficiaries:", e);
+        finalBeneficiaries = [];
+      }
+    }
+    
+    // Ensure it's definitely an array
+    if (!Array.isArray(finalBeneficiaries)) {
+      finalBeneficiaries = [];
+    }
+
+
+
       console.log("PAYLOAD SENT:", {
   owner: localStorage.getItem("user_id"),
   title,
   description,
   tagsPreview,
   size: videoFile?.size,
-  duration: videoFile?.duration,
-  filename: videoFile?.name,
+  duration: videoDuration,
   community,
   declineRewards,
-  beneficiaries
+  beneficiaries:finalBeneficiaries
 });
 
       const prepareResp = await axios.post(
@@ -97,11 +119,11 @@ function Preview() {
           description,
           tags: tagsPreview,
           size: videoFile.size,
-          duration: Math.round(videoFile.duration || 60),
+          duration: videoDuration,
           originalFilename: videoFile.name,
           community,
           declineRewards,
-          beneficiaries,
+          beneficiaries
         },
         {
           headers: {
